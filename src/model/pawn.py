@@ -1,4 +1,4 @@
-from color import Color
+from src.model.color import Color
 
 class Pawn():    
     def __init__(self, id, position, color):

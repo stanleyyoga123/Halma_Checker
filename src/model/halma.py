@@ -1,9 +1,9 @@
-from pawn import Pawn
-from board import Board
-from player import Player
-from agent import Agent
-from tile import Tile
-from color import Color
+from src.model.player import Player
+from src.model.board import Board 
+from src.model.agent import Agent
+from src.model.tile import Tile 
+from src.model.color import Color
+
 
 class Halma():
 
