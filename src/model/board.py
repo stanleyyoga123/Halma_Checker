@@ -78,7 +78,7 @@ class Board():
                 if self.get_pawn(updated_pawn_location) is None and not self.is_out_board(updated_pawn_location):
                     can_move = True
                     can_jump = True
-                    temp_pawn = pawn.copy(position=self.tiles[updated_pawn_location[0]][updated_pawn_location[1]])
+                    temp_pawn = pawn.temp_copy(position=self.tiles[updated_pawn_location[0]][updated_pawn_location[1]])
                     temp_pawn = self.change_color_pawn(temp_pawn, self.tiles[updated_pawn_location[0]][updated_pawn_location[1]])
 
         if can_jump:
@@ -110,7 +110,7 @@ class Board():
                                     pawn.position.location[1] + val[1])
             
             if self.get_pawn(updated_pawn_location) is None and not self.is_out_board(updated_pawn_location):
-                temp_pawn = pawn.copy(position=self.tiles[updated_pawn_location[0]][updated_pawn_location[1]])
+                temp_pawn = pawn.temp_copy(position=self.tiles[updated_pawn_location[0]][updated_pawn_location[1]])
                 temp_pawn = self.change_color_pawn(temp_pawn, self.tiles[updated_pawn_location[0]][updated_pawn_location[1]])
                 possible_move.append(temp_pawn)
         
@@ -145,5 +145,4 @@ class Board():
         print(after.position)
         for i, pawn in enumerate(self.pawns):
             if pawn == before:
-                print('FOUND PAWN')
-                self.pawns[i] = after
+                self.pawns[i].copy(after)

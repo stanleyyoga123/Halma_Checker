@@ -18,10 +18,16 @@ class Pawn():
     def __eq__(self, pawn):
         return self.position.location == pawn.position.location
 
-    def copy(self, position):
+    def temp_copy(self, position):
         temp_pawn = Pawn(self.id, position, self.color)
         temp_pawn.has_red = self.has_red
         temp_pawn.has_green = self.has_red
         temp_pawn.has_neutral = self.has_neutral
 
         return temp_pawn
+    
+    def copy(self, pawn):
+        self.position = pawn.position
+        self.has_red = pawn.has_red
+        self.has_green = pawn.has_green
+        self.has_neutral = pawn.has_neutral
