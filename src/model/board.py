@@ -119,7 +119,7 @@ class Board():
             Array(Pawn): List of possibility jump from selected Pawn
         '''
         for key, _ in self.list_direction.items():
-            can_jump, pawn_after = self.check_move(pawn, key)
+            can_jump, pawn_after = self.check_jump(pawn, key)
             if can_jump and pawn_after not in history:
                 if self.base_field_checker(pawn, pawn_after.position):
                     continue
