@@ -188,8 +188,6 @@ class Board():
             before (Pawn): Selected Pawn
             after (Pawn): Destination Pawn
         '''
-        print(before.position)
-        print(after.position)
         for i, pawn in enumerate(self.pawns):
             if pawn == before:
                 self.pawns[i].copy(after)
