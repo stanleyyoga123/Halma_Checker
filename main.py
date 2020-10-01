@@ -1,11 +1,12 @@
 from src.halma import Halma
-from src.model import Color
-from src.model import Pawn
-from src.model import Tile
+from src.model import Color, Pawn, Tile
+from src.io import CLIInput, CLIOutput
 
 if __name__ == '__main__':
-    game = Halma(10, 10, Color.RED)
-    print(game.board)
+    inputter = CLIInput()
+    outputter = CLIOutput()
+    game = Halma(10, 10, Color.RED, inputter, outputter)
+    game.outputter.show(game.board)
 
     while True:
         game.game()
