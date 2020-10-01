@@ -1,9 +1,9 @@
-from src.model.player import Player
-from src.model.board import Board 
-from src.model.agent import Agent
-from src.model.tile import Tile 
-from src.model.color import Color
-
+from .player import Player
+from .board import Board 
+from .agent import Agent
+from .tile import Tile 
+from .color import Color
+from .pawn import Pawn
 
 class Halma():
 
@@ -27,8 +27,7 @@ class Halma():
         }
 
         # Create all tiles to neutral
-        tiles = [[Tile(i, j, Color.NEUTRAL) for i in range(b_size)] for j in range(b_size)]
-        
+        tiles = [[Tile(i, j, Color.NEUTRAL) for j in range(b_size)] for i in range(b_size)]
         # Red Location
         for i in range(4):
             for j in range(4-i):
@@ -62,8 +61,8 @@ class Halma():
             self.player_1 = Player(red['pawns'], Color.RED, red['win_condition'])
             self.player_2 = Agent(green['pawns'], Color.GREEN, green['win_condition'], t_limit)
         else:
-            self.player_1 = Player(red['pawns'], Color.RED, red['win_condition'])
-            self.player_2 = Agent(green['pawns'], Color.GREEN, green['win_condition'], t_limit)
+            self.player_1 = Player(green['pawns'], Color.GREEN, green['win_condition'])
+            self.player_2 = Agent(red['pawns'], Color.RED, red['win_condition'], t_limit)
 
         # History
         self.history = []
@@ -71,6 +70,26 @@ class Halma():
         # Current Board
         self.currentBoard = None
 
-if __name__ == '__main__':
-    game = Halma(10, 10, Color.RED)
-    print(game.board)
+        # Current Player
+        if h_player == Color.GREEN:
+            self.currentPlayer = self.player_1
+        else:
+            self.currentPlayer = self.player_2
+
+    def move(self):
+        print('List Pawns')
+        for i, pawn in enumerate(self.currentPlayer.pawns):
+            print(f'{i+1}. Pawns at {pawn.position}')
+        
+        choosed_pawn = int(input('Choose Pawn: '))
+        pawn = self.currentPlayer.pawns[choosed_pawn-1]
+        print(f'You Choose Pawn at {pawn.position}')
+
+        print('Pawn Possible Moves:')
+        possible_moves = self.board.possible_moves(pawn)
+        
+        for i, pawn in enumerate(possible_moves):
+            print(f'{i+1}. Pawns to {pawn.position}')
+
+    def game(self):
+        self.move()
