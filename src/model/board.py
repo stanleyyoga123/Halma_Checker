@@ -57,7 +57,7 @@ class Board():
         '''
         location: tuple(int, int)
         '''
-        return (location[0] >= self.b_size or location[1] >= self.b_size)
+        return (location[0] >= self.b_size or location[1] >= self.b_size or location[0] < 0 or location[1] < 0)
         
     def check_move(self, pawn, direction):
         '''
@@ -133,21 +133,17 @@ class Board():
         '''
         pawn: Pawn
         '''
-
-        print('================')
         adjacent_move = self.adjacent_move(pawn)
-        print('Adjacent_move')
-        for i, pawn in enumerate(adjacent_move):
-            print(f'{i+1}. {pawn.position}')
-        print('================')
         jump_move = self.possible_jump(pawn, [])
-        print('Jump move')
-        for i, pawn in enumerate(jump_move):
-            print(f'{i+1}. {pawn.position}')
-        print('================')
         return adjacent_move + jump_move
 
-    # def move_pawn(self, before, after):
-    #     '''
-    #     before, after: Pawn
-    #     '''
+    def move_pawn(self, before, after):
+        '''
+        before, after: Pawn
+        '''
+        print(before.position)
+        print(after.position)
+        for i, pawn in enumerate(self.pawns):
+            if pawn == before:
+                print('FOUND PAWN')
+                self.pawns[i] = after

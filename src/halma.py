@@ -73,9 +73,6 @@ class Halma():
         # History
         self.history = []
 
-        # Current Board
-        self.currentBoard = None
-
         # Current Player
         if h_player == Color.GREEN:
             self.currentPlayer = self.player_1
@@ -83,9 +80,15 @@ class Halma():
             self.currentPlayer = self.player_2
 
     def move(self):
-        self.inputter.input(self.board, self.currentPlayer) 
+        before, after = self.inputter.input(self.board, self.currentPlayer) 
         # TODO : move logic abis itu ... 
+        self.board.move_pawn(before, after)
 
     def game(self):
         self.move()
         self.outputter.show(self.board)
+
+        if self.currentPlayer == self.player_1:
+            self.currentPlayer = self.player_2
+        else:
+            self.currentPlayer = self.player_1
