@@ -37,13 +37,13 @@ class CLIInput():
     def input(self, board, player):
         pawns = [f"Pawns at {pawn.position}" for pawn in player.pawns]
         i_choosed_pawn = self.ask_pawn(pawns)
-        choosed_pawn = player.pawns[i_choosed_pawn-1]
+        choosed_pawn = player.pawns[i_choosed_pawn]
 
         possible_moves = board.possible_moves(choosed_pawn)
         possible_moves_str = [f"Pawn to {pawn.position}" for pawn in possible_moves]
         i_moved_pawn = self.ask_movement(possible_moves_str)
 
-        moved_pawn = possible_moves[i_moved_pawn-1] 
+        moved_pawn = possible_moves[i_moved_pawn] 
         print(f'You Choose Pawn from {choosed_pawn.position} Move to {moved_pawn.position}')
         print()
 
