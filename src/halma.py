@@ -26,7 +26,7 @@ class Halma():
         self.h_player = h_player
 
         # Initialize game location
-        red, green, tiles = self.init_location(red, green, tiles)
+        red, green, tiles = self.init_location()
 
         # Initialize Board
         self.board = Board(b_size, red['pawns'] + green['pawns'], tiles)
@@ -62,7 +62,7 @@ class Halma():
             self.player_1 = Player(green['pawns'], Color.GREEN, green['win_condition'])
             self.player_2 = Agent(red['pawns'], Color.RED, red['win_condition'], self.t_limit)
     
-    def init_location(self, red, green, tiles):
+    def init_location(self):
         cur_id = 0
 
         red = {
@@ -75,7 +75,7 @@ class Halma():
         }
 
         # Create all tiles to neutral
-        tiles = [[Tile(i, j, Color.NEUTRAL) for j in range(b_size)] for i in range(b_size)]
+        tiles = [[Tile(i, j, Color.NEUTRAL) for j in range(self.b_size)] for i in range(self.b_size)]
 
         # Red Location
         for i in range(4):
