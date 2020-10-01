@@ -5,6 +5,9 @@ from .model.tile import Tile
 from .model.color import Color
 from .model.pawn import Pawn
 
+from .io.cli_input import CLIInput
+from .io.cli_output import CLIOutput
+
 class Halma():
 
     def __init__(self, b_size, t_limit, h_player):
@@ -13,6 +16,9 @@ class Halma():
         t_limit = time limit
         h_player = player color
         '''
+        self.inputter = CLIInput()    # inject dependencies for input 
+        self.outputter = CLIOutput()  # inject dependencies for output
+
         self.turn = 0
         self.t_limit = t_limit
 
@@ -77,19 +83,9 @@ class Halma():
             self.currentPlayer = self.player_2
 
     def move(self):
-        print('List Pawns')
-        for i, pawn in enumerate(self.currentPlayer.pawns):
-            print(f'{i+1}. Pawns at {pawn.position}')
-        
-        choosed_pawn = int(input('Choose Pawn: '))
-        pawn = self.currentPlayer.pawns[choosed_pawn-1]
-        print(f'You Choose Pawn at {pawn.position}')
-
-        print('Pawn Possible Moves:')
-        possible_moves = self.board.possible_moves(pawn)
-        
-        for i, pawn in enumerate(possible_moves):
-            print(f'{i+1}. Pawns to {pawn.position}')
+        self.inputter.input(self.board, self.currentPlayer) 
+        # TODO : move logic abis itu ... 
 
     def game(self):
         self.move()
+        self.outputter.show(self.board)

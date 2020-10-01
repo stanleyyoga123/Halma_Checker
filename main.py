@@ -9,4 +9,3 @@ if __name__ == '__main__':
 
     while True:
         game.game()
-        print(game.board)
