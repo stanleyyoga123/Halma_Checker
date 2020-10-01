@@ -4,6 +4,8 @@ from .color import Color
 
 from colorama import Fore, Style
 
+DEBUG = False
+
 class Board():
     def __init__(self, b_size, pawns, tiles):
         self.b_size = b_size
@@ -62,8 +64,8 @@ class Board():
         Returns:
             boolean: True if they move back to its base or move out from enemy base  
         '''
-        neutral_to_base = (pawn.has_red and pawn.has_neutral and after.color == Color.RED) or \
-                            (pawn.has_green and pawn.has_neutral and after.color == Color.GREEN)
+        neutral_to_base = (pawn.has_red and pawn.has_neutral and not pawn.has_green and after.color == Color.RED) or \
+                            (pawn.has_green and pawn.has_neutral and not pawn.has_red and after.color == Color.GREEN)
         base_to_neutral = pawn.has_red and pawn.has_green and after.color == Color.NEUTRAL
         return neutral_to_base or base_to_neutral
     
@@ -120,11 +122,17 @@ class Board():
         '''
         for key, _ in self.list_direction.items():
             can_jump, pawn_after = self.check_jump(pawn, key)
+        
             if can_jump and pawn_after not in history:
+                
+                if DEBUG:
+                    print(f'{key} {pawn.position} {pawn_after.position}')
+
                 if self.base_field_checker(pawn, pawn_after.position):
                     continue
                 history.append(pawn_after)
                 history = self.possible_jump(pawn_after, history)
+        
         return history  
     
     def adjacent_move(self, pawn):
@@ -179,7 +187,20 @@ class Board():
         '''
         adjacent_move = self.adjacent_move(pawn)
         jump_move = self.possible_jump(pawn, [])
-        return adjacent_move + jump_move
+
+        if DEBUG:
+            print('===================')
+            print('ADJACENT')
+            for i, pawn in enumerate(adjacent_move):
+                print(f'{i}. {pawn.position}')
+            print('===================')
+            print('JUMP')
+            for i, pawn in enumerate(jump_move):
+                print(f'{i}. {pawn.position}')
+            print('===================')
+            print()
+            
+        return list(dict.fromkeys(adjacent_move + jump_move))
 
     def move_pawn(self, before, after):
         '''Update Pawn to new location
