@@ -1,8 +1,6 @@
 from .pawn import Pawn
 from .tile import Tile
-from .color import Color
-
-import numpy as np
+from .color import Color    
 
 class Board():
     def __init__(self, b_size, pawns, tiles):
