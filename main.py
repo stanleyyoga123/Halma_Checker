@@ -15,7 +15,7 @@ if __name__ == '__main__':
 	game = Halma(Constant.BOARDSIZE, Constant.BOARDSIZE, Color.RED, inputter, outputter, player1=player1, player2=player2)
 	game.outputter.show(game.state.board)
 
-	# TODO :nanti buat gui, for loop ke pysimpleGUI
+	# TODO : create a loop for event GUI 
 	try :
 		while True:
 			game.game()

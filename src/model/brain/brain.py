@@ -5,5 +5,14 @@ class Brain(metaclass=ABCMeta):
     '''
     @abstractmethod
     def find_best_move(self, utility_function, state):
+        '''Find best move
+        
+        Parameters:
+            utility_function (func): Function for getting utility value
+            state (State): Current Game State
+        
+        Returns:
+            State: Next state with best move being done by AI 
+        '''
         raise NotImplementedError
     

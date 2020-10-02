@@ -23,6 +23,8 @@ class Halma():
             h_player (int): Player color
             inputter (CLIInput): Input for CLI
             outputter (CLIOutput): Output for CLI
+            player1 (Player): Player Object representing player 1
+            player2 (Player): Player Object representing player 2
         '''
         # Initialize properties
         self.inputter = inputter    
@@ -84,21 +86,21 @@ class Halma():
         Parameters:
             red (dict): Red player
             green (dict): Green player
+            player1 (Player): Player Object representing player 1
+            player2 (Player): Player Object representing player 2
         
         Returns:
             Tuple(Player, Player: Initialized Player
         '''
-        # Initialize Player
+        def closure_init_player(setup, color, player, t_limit):
+            if repr(player.brain) == Constant.NOBRAIN:
+                player.inject(setup.get('pawn'), color, setup.get('win_condition'))
+            else: 
+                player.inject(setup.get('pawn'), color, setup.get('win_condition'), t_limit)
+            return player
 
-        if repr(player1.brain) == Constant.NOBRAIN:
-            player1.inject(red['pawns'], Color.RED, red['win_condition'])
-        else :
-            player1.inject(red['pawns'], Color.RED, red['win_condition'], self.t_limit)
-
-        if repr(player2.brain) == Constant.NOBRAIN:
-            player2.inject(green['pawns'], Color.GREEN, green['win_condition'])
-        else :
-            player2.inject(green['pawns'], Color.GREEN, green['win_condition'], self.t_limit)
+        player1 = closure_init_player(red, Color.RED, player1, self.t_limit)
+        player2 = closure_init_player(green, Color.GREEN, player2, self.t_limit)
         return (player1, player2)
     
     def init_location(self):

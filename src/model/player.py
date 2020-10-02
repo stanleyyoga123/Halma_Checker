@@ -7,13 +7,18 @@ class Player():
         '''Constructor
         
         Parameters:
-            pawns (list(Pawn)): Players pawns
-            color (int): Players color
-            winCondition (list(Tile)): Tiles needed for player to win
+            brain(Brain) : Brain injected for the player
         '''
         self.brain = brain
 
     def inject(self, pawns, color, winCondition):
+        '''Dependencies Injection Procedure
+
+        Parameters:
+            pawns (list(Pawn)): Players pawns
+            color (int): Players color
+            winCondition (list(Tile)): Tiles needed for player to win
+        '''
         self.pawns = pawns
         self.color = color
         self.winCondition = winCondition
