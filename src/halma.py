@@ -4,23 +4,28 @@ from .model.agent import Agent
 from .model.tile import Tile 
 from .model.color import Color
 from .model.pawn import Pawn
+from .model.state import State
 
 from .io.cli_input import CLIInput
 from .io.cli_output import CLIOutput
 
 class Halma():
-
+    '''Halma class responsible for controlling flow in the game
+    '''
     def __init__(self, b_size, t_limit, h_player, inputter, outputter):
-        '''
-        b_size = board size (8, 10, 16)
-        t_limit = time limit
-        h_player = player color
+        '''Constructor
+
+        Parameters:
+            b_size (int): Board size
+            t_limit (int): Time limit
+            h_player (int): Player color
+            inputter (CLIInput): Input for CLI
+            outputter (CLIOutput): Output for CLI
         '''
         # Initialize properties
         self.inputter = inputter    
         self.outputter = outputter  
 
-        self.turn = 0
         self.t_limit = t_limit
         self.b_size = b_size
         self.h_player = h_player
@@ -29,40 +34,69 @@ class Halma():
         red, green, tiles = self.init_location()
 
         # Initialize Board
-        self.board = Board(b_size, red['pawns'] + green['pawns'], tiles)
+        board = Board(b_size, red['pawns'] + green['pawns'], tiles)
 
         # Init player
-        self.init_player(red, green)
+        player_1, player_2 = self.init_player(red, green)
 
         # History
         self.history = []
 
         # Current Player        
-        self.currentPlayer = self.player_1 if h_player == Color.GREEN else self.player_2
+        currentPlayer = player_1 if h_player == Color.GREEN else player_2
+
+        # State
+        self.state = State(board, player_1, player_2, currentPlayer)
 
     def move(self):
-        before, after = self.inputter.input(self.board, self.currentPlayer) 
-        self.board.move_pawn(before, after)
+        '''Method to move pawn
+        '''
+        before, after = self.inputter.input(self.state.board, self.state.currentPlayer) 
+        self.state.board.move_pawn(before, after)
 
     def game(self):
+        '''Main method for each turn
+        '''
+        self.state.player_2.state = self.state
+
         self.move()
-        self.outputter.show(self.board)
+        self.outputter.show(self.state.board)
         self.next()
-        
     
     def next(self):
-        self.currentPlayer = self.player_2 if self.currentPlayer == self.player_1 else self.player_1
+        '''Updating attribute after turn end
+        '''
+        self.history.append(self.state.deepcopy())
+        self.state.currentPlayer = self.state.player_2 if self.state.currentPlayer == self.state.player_1 else self.state.player_1
+        self.state.turn += 1
+        # self.state.update(self.board, self.state.player_1, self.state.player_2, self.currentPlayer, self.turn)
     
     def init_player(self, red, green):
+        '''Initialize Player
+        
+        Parameters:
+            red (dict): Red player
+            green (dict): Green player
+        
+        Returns:
+            Tuple(Player, Player: Initialized Player
+        '''
         # Initialize Player
         if self.h_player == Color.RED:
-            self.player_1 = Player(red['pawns'], Color.RED, red['win_condition'])
-            self.player_2 = Agent(green['pawns'], Color.GREEN, green['win_condition'], self.t_limit)
+            player_1 = Player(red['pawns'], Color.RED, red['win_condition'])
+            player_2 = Agent(green['pawns'], Color.GREEN, green['win_condition'], self.t_limit)
         else:
-            self.player_1 = Player(green['pawns'], Color.GREEN, green['win_condition'])
-            self.player_2 = Agent(red['pawns'], Color.RED, red['win_condition'], self.t_limit)
+            player_1 = Player(green['pawns'], Color.GREEN, green['win_condition'])
+            player_2 = Agent(red['pawns'], Color.RED, red['win_condition'], self.t_limit)
+        
+        return (player_1, player_2)
     
     def init_location(self):
+        '''Initialize all location (tiles, winCondition, etc) for green, red, and board
+
+        Returns:
+            Tuple(map, map, list(Tile)): Initialized Location
+        '''
         cur_id = 0
 
         red = {

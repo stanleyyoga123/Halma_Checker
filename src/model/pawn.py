@@ -1,7 +1,16 @@
 from .color import Color
 
-class Pawn():    
+class Pawn():
+    '''Class Pawn contains attribute for each pawn used in the game 
+    '''
     def __init__(self, id, position, color):
+        '''Constructor
+
+        Parameters:
+            id (int): id
+            position (Tile): Tile on pawn
+            color (int): Pawn color
+        '''
         self.id = id
         self.position = position
         self.color = color
@@ -47,7 +56,7 @@ class Pawn():
         '''Copy Pawn
         
         Parameters:
-            pawn (Pawn): Destination Pawn
+            pawn (Pawn): Pawn
         '''
         self.position = pawn.position
         self.has_red = pawn.has_red

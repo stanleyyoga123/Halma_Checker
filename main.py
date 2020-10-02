@@ -9,7 +9,7 @@ if __name__ == '__main__':
 	inputter = CLIInput()
 	outputter = CLIOutput()
 	game = Halma(10, 10, Color.RED, inputter, outputter)
-	game.outputter.show(game.board)
+	game.outputter.show(game.state.board)
 
 	while True:
 		game.game()
