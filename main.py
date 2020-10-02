@@ -1,15 +1,24 @@
+import sys
+
 from src.halma import Halma
 from src.model import Color, Pawn, Tile
-from src.io import CLIInput, CLIOutput, CLIOpening
+from src.constant import Constant
+from src.io import CLIInput, CLIOutput, CLIPrompt
+
 	
 if __name__ == '__main__':
-	CLIOpening().show_title()
-	game_mode = CLIOpening().ask_game_mode()
+	CLIPrompt().show_title()
+	player1, player2 = CLIPrompt().ask_game_mode()
 
 	inputter = CLIInput()
 	outputter = CLIOutput()
-	game = Halma(10, 10, Color.RED, inputter, outputter)
+	game = Halma(Constant.BOARDSIZE, Constant.BOARDSIZE, Color.RED, inputter, outputter, player1=player1, player2=player2)
 	game.outputter.show(game.state.board)
 
-	while True:
-		game.game()
+	# TODO :nanti buat gui, for loop ke pysimpleGUI
+	try :
+		while True:
+			game.game()
+	except Exception:
+		CLIPrompt().show_ending(ending="Game Ended!")
+		sys.exit(1)

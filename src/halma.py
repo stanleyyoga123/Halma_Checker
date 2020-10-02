@@ -1,6 +1,6 @@
 from .model.player import Player
 from .model.board import Board 
-from .model.agent import Agent
+from .model.bot import Bot
 from .model.tile import Tile 
 from .model.color import Color
 from .model.pawn import Pawn
@@ -9,10 +9,12 @@ from .model.state import State
 from .io.cli_input import CLIInput
 from .io.cli_output import CLIOutput
 
+from .constant import Constant
+
 class Halma():
     '''Halma class responsible for controlling flow in the game
     '''
-    def __init__(self, b_size, t_limit, h_player, inputter, outputter):
+    def __init__(self, b_size, t_limit, h_player, inputter, outputter, player1, player2):
         '''Constructor
 
         Parameters:
@@ -37,13 +39,13 @@ class Halma():
         board = Board(b_size, red['pawns'] + green['pawns'], tiles)
 
         # Init player
-        player_1, player_2 = self.init_player(red, green)
+        player_1, player_2 = self.init_player(red, green, player1, player2)
 
         # History
         self.history = []
 
         # Current Player        
-        currentPlayer = player_1 if h_player == Color.GREEN else player_2
+        currentPlayer = player_1 
 
         # State
         self.state = State(board, player_1, player_2, currentPlayer)
@@ -51,8 +53,13 @@ class Halma():
     def move(self):
         '''Method to move pawn
         '''
-        before, after = self.inputter.input(self.state.board, self.state.currentPlayer) 
-        self.state.board.move_pawn(before, after)
+        if repr(self.state.currentPlayer.brain) == Constant.NOBRAIN:
+            before, after = self.inputter.input(self.state.board, self.state.currentPlayer) 
+            self.state.board.move_pawn(before, after)
+        else :
+            # nanti ganti dari inputer ke minimax -> output tetap sama
+            before, after = self.inputter.input(self.state.board, self.state.currentPlayer) 
+            self.state.board.move_pawn(before, after)
 
     def game(self):
         '''Main method for each turn
@@ -71,7 +78,7 @@ class Halma():
         self.state.turn += 1
         # self.state.update(self.board, self.state.player_1, self.state.player_2, self.currentPlayer, self.turn)
     
-    def init_player(self, red, green):
+    def init_player(self, red, green, player1, player2):
         '''Initialize Player
         
         Parameters:
@@ -82,14 +89,17 @@ class Halma():
             Tuple(Player, Player: Initialized Player
         '''
         # Initialize Player
-        if self.h_player == Color.RED:
-            player_1 = Player(red['pawns'], Color.RED, red['win_condition'])
-            player_2 = Agent(green['pawns'], Color.GREEN, green['win_condition'], self.t_limit)
-        else:
-            player_1 = Player(green['pawns'], Color.GREEN, green['win_condition'])
-            player_2 = Agent(red['pawns'], Color.RED, red['win_condition'], self.t_limit)
-        
-        return (player_1, player_2)
+
+        if repr(player1.brain) == Constant.NOBRAIN:
+            player1.inject(red['pawns'], Color.RED, red['win_condition'])
+        else :
+            player1.inject(red['pawns'], Color.RED, red['win_condition'], self.t_limit)
+
+        if repr(player2.brain) == Constant.NOBRAIN:
+            player2.inject(green['pawns'], Color.GREEN, green['win_condition'])
+        else :
+            player2.inject(green['pawns'], Color.GREEN, green['win_condition'], self.t_limit)
+        return (player1, player2)
     
     def init_location(self):
         '''Initialize all location (tiles, winCondition, etc) for green, red, and board
