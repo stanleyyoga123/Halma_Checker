@@ -1,4 +1,4 @@
-from src.model.player import Player
+from .player import Player
 
 class Agent(Player):
 
