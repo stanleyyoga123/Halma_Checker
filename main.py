@@ -19,6 +19,7 @@ if __name__ == '__main__':
 	try :
 		while True:
 			game.game()
-	except Exception:
+	except Exception as err:
 		CLIPrompt().show_ending(ending="Game Ended!")
 		sys.exit(1)
+	

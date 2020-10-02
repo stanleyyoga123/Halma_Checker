@@ -94,9 +94,9 @@ class Halma():
         '''
         def closure_init_player(setup, color, player, t_limit):
             if repr(player.brain) == Constant.NOBRAIN:
-                player.inject(setup.get('pawn'), color, setup.get('win_condition'))
+                player.inject(setup.get('pawns'), color, setup.get('win_condition'))
             else: 
-                player.inject(setup.get('pawn'), color, setup.get('win_condition'), t_limit)
+                player.inject(setup.get('pawns'), color, setup.get('win_condition'), t_limit)
             return player
 
         player1 = closure_init_player(red, Color.RED, player1, self.t_limit)
