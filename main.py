@@ -16,7 +16,6 @@ if __name__ == '__main__':
 	gui = GUI()
 	gui.render(game.state.board)
 	while True:
-		gui.render_color_reverse()
 		gui.render(game.state.board)
 		
 	GUI().window.close()

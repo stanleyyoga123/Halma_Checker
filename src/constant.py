@@ -1,3 +1,5 @@
+from .model import Color
+
 class Constant():
     '''Class for general constant that can be used on all class
     '''
@@ -6,3 +8,6 @@ class Constant():
     MINMAXWLOCAL="minimax + local search"
 
     BOARDSIZE=10
+
+    PLAYER1=Color.RED
+    PLAYER2=Color.GREEN
