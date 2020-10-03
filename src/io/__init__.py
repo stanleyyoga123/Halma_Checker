@@ -1,1 +1,2 @@
-from .cli import CLIInput, CLIOutput, CLIPrompt
+from .cli import CLI
+from .gui import GUI

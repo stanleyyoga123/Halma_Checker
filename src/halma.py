@@ -10,21 +10,19 @@ from .constant import Constant
 class Halma():
     '''Halma class responsible for controlling flow in the game
     '''
-    def __init__(self, b_size, t_limit, h_player, inputter, outputter, player1, player2):
+    def __init__(self, b_size, t_limit, h_player, interface, player1, player2):
         '''Constructor
 
         Parameters:
             b_size (int): Board size
             t_limit (int): Time limit
             h_player (int): Player color
-            inputter (CLIInput): Input for CLI
-            outputter (CLIOutput): Output for CLI
+            interface (I/O Interface): I/O for game
             player1 (Player): Player Object representing player 1
             player2 (Player): Player Object representing player 2
         '''
         # Initialize properties
-        self.inputter = inputter    
-        self.outputter = outputter  
+        self.interface = interface 
 
         self.t_limit = t_limit
         self.b_size = b_size
@@ -52,11 +50,11 @@ class Halma():
         '''Method to move pawn
         '''
         if repr(self.state.currentPlayer.brain) == Constant.NOBRAIN:
-            before, after = self.inputter.input(self.state.board, self.state.currentPlayer) 
+            before, after = self.interface.input(self.state.board, self.state.currentPlayer) 
             self.state.board.move_pawn(before, after)
         else :
             # nanti ganti dari inputer ke minimax -> output tetap sama
-            before, after = self.inputter.input(self.state.board, self.state.currentPlayer) 
+            before, after = self.interface.input(self.state.board, self.state.currentPlayer) 
             self.state.board.move_pawn(before, after)
 
     def game(self):
@@ -65,7 +63,7 @@ class Halma():
         self.state.player_2.state = self.state
 
         self.move()
-        self.outputter.show(self.state.board)
+        self.interface.render(self.state.board)
         self.next()
     
     def next(self):
