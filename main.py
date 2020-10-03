@@ -11,14 +11,16 @@ if __name__ == '__main__':
 	interface = CLI()
 	interface.show_title()
 	player1, player2 = interface.ask_game_mode()
-	game = Halma(Constant.BOARDSIZE, Constant.BOARDSIZE, Color.RED, interface, player1=player1, player2=player2)
-	game.interface.render(game.state.board)
+
 	gui = GUI()
-	gui.render(game.state.board)
+	game = Halma(Constant.BOARDSIZE, Constant.BOARDSIZE, Color.RED, gui, player1=player1, player2=player2)
+	print(game.state.board)
+	game.interface.render(game.state.board)
+
 	while True:
-		gui.render(game.state.board)
-		
-	GUI().window.close()
+		game.game()
+
+
 	# TODO : create a loop for event GUI 
 	# try :
 	# 	while True:
