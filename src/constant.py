@@ -8,11 +8,14 @@ class Constant():
     MINMAXWLOCAL="minimax + local search"
 
     BOARDSIZE=10
+    HALFBOARDCOL=4
 
     PLAYER1=Color.RED
     PLAYER2=Color.GREEN
 
     # Color constant
+    NORMAL="#411f1f"
+
     LIGHTRED="#ffb0b0"
     DARKRED="#ec0101"
     PAWNRED="#7d0633"

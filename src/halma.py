@@ -50,11 +50,11 @@ class Halma():
         '''Method to move pawn
         '''
         if repr(self.state.currentPlayer.brain) == Constant.NOBRAIN:
-            before, after = self.interface.input(self.state.board, self.state.currentPlayer) 
+            before, after = self.interface.input(self.state) 
             self.state.board.move_pawn(before, after)
         else :
             # nanti ganti dari inputer ke minimax -> output tetap sama
-            before, after = self.interface.input(self.state.board, self.state.currentPlayer) 
+            before, after = self.interface.input(self.state) 
             self.state.board.move_pawn(before, after)
 
     def game(self):
@@ -63,7 +63,7 @@ class Halma():
         self.state.player_2.state = self.state
 
         self.move()
-        self.interface.render(self.state.board)
+        self.interface.render(self.state)
         self.next()
     
     def next(self):

@@ -9,15 +9,15 @@ from src.constant import Constant
 from .utils import get_style
 
 class CLI():
-    def render(self, board):
-        print(colored.green(str(board)))
+    def render(self, state):
+        print(colored.green(str(state.board)))
 
-    def input(self, board, player):
-        pawns = [f"Pawns at {pawn.position}" for pawn in player.pawns]
+    def input(self, state):
+        pawns = [f"Pawns at {pawn.position}" for pawn in state.currentPlayer.pawns]
         i_choosed_pawn = self.ask_pawn(pawns)
-        choosed_pawn = player.pawns[i_choosed_pawn]
+        choosed_pawn = state.currentPlayer.pawns[i_choosed_pawn]
 
-        possible_moves = board.possible_moves(choosed_pawn)
+        possible_moves = state.board.possible_moves(choosed_pawn)
         possible_moves_str = [f"Pawn to {pawn.position}" for pawn in possible_moves]
         i_moved_pawn = self.ask_movement(possible_moves_str)
 
@@ -76,6 +76,23 @@ class CLI():
 
     def show_ending(self, ending = "Congratulations!!"):
         print(colored.red(pyfiglet.figlet_format(ending, font = "slant")))
+    
+    def select_interface(self):
+        map = {
+            "Graphical User Interface (GUI)" : "gui",
+            "Command Line Interface (CLI)" : "cli"
+        }
+        question = [
+            {
+                'type' : 'list',
+                'name' : 'interface',
+                'message' : "Please choose an interface : ",
+                'choices' : ["Command Line Interface (CLI)", "Graphical User Interface (GUI)"],
+                'filter' : lambda val: map[val]
+            }
+        ]
+        return prompt(question, style = style_from_dict(get_style()))['interface']
+    
 
 
     

@@ -33,12 +33,12 @@ class GUI():
             else :
                 return  Constant.DARKBOARD
 
-    def render(self, board):
-        location = [{pawn.position.location : str(pawn)} for pawn in board.pawns]
-        red_loc = [pawn.position.location for pawn in board.pawns if str(pawn) == Constant.PAWNREDTYPE]
-        green_loc = [pawn.position.location for pawn in board.pawns if str(pawn) == Constant.PAWNGREENTYPE]
-        for i in range(board.b_size):
-            for j in range(board.b_size):
+    def render(self, state):
+        location = [{pawn.position.location : str(pawn)} for pawn in state.board.pawns]
+        red_loc = [pawn.position.location for pawn in state.board.pawns if str(pawn) == Constant.PAWNREDTYPE]
+        green_loc = [pawn.position.location for pawn in state.board.pawns if str(pawn) == Constant.PAWNGREENTYPE]
+        for i in range(state.board.b_size):
+            for j in range(state.board.b_size):
                 if (i,j) in red_loc:
                     self.window[(i,j)].update(Constant.PAWNCHAR, button_color = (Constant.PAWNRED, self.generate_button_color((i,j))), disabled=True)
                 elif (i,j) in green_loc:
@@ -51,24 +51,24 @@ class GUI():
         for i in range(board.b_size):
             for j in range(board.b_size):
                 if (i, j) in possible_move:
-                    self.window[(i,j)].update(Constant.TARGETCHAR, disabled=False, button_color = ("black", Constant.POSSIBLERED if color == Color.RED else Constant.POSSIBLEGREEN))
+                    self.window[(i,j)].update(Constant.TARGETCHAR, disabled=False, button_color = (Constant.NORMAL, Constant.POSSIBLERED if color == Color.RED else Constant.POSSIBLEGREEN))
         self.window.read(timeout=10)
 
     def remove_possible_move(self, board, possible_move):
         for i in range(board.b_size):
             for j in range(board.b_size):
                 if (i, j) in possible_move:
-                    self.window[(i,j)].update("", disabled=True, button_color=("black", self.generate_button_color((i,j))))
+                    self.window[(i,j)].update("", disabled=True, button_color=(Constant.NORMAL, self.generate_button_color((i,j))))
         
 
-    def input(self, board, player):
-        if player.color == Color.RED:
-            loc = [pawn.position.location for pawn in board.pawns if str(pawn) == Constant.PAWNREDTYPE]
+    def input(self, state):
+        if state.currentPlayer.color == Color.RED:
+            loc = [pawn.position.location for pawn in state.board.pawns if str(pawn) == Constant.PAWNREDTYPE]
         else : 
-            loc = [pawn.position.location for pawn in board.pawns if str(pawn) == Constant.PAWNGREENTYPE]
+            loc = [pawn.position.location for pawn in state.board.pawns if str(pawn) == Constant.PAWNGREENTYPE]
 
-        for i in range(board.b_size):
-            for j in range(board.b_size):
+        for i in range(state.board.b_size):
+            for j in range(state.board.b_size):
                 if (i,j) in loc:
                     self.window[(i,j)].update(disabled=False)
         event, values = self.window.read()
@@ -78,10 +78,10 @@ class GUI():
             
             choosed_pawn = None
             if event in loc:
-                choosed_pawn = [pawn for pawn in board.pawns if pawn.position.location == event][0]
-                possible_moves = board.possible_moves(choosed_pawn)
+                choosed_pawn = [pawn for pawn in state.board.pawns if pawn.position.location == event][0]
+                possible_moves = state.board.possible_moves(choosed_pawn)
                 possible_moves_repr = [pawn.position.location for pawn in possible_moves]
-                self.render_possible_move(board, possible_moves_repr, player.color)
+                self.render_possible_move(state.board, possible_moves_repr, state.currentPlayer.color)
 
             event, values = self.window.read()
             if event in (None, "Exit"):
@@ -92,17 +92,8 @@ class GUI():
                 moved_pawn = possible_moves[possible_moves_repr.index(event)]
                 break
             else : 
-                 self.remove_possible_move(board, possible_moves_repr)
+                 self.remove_possible_move(state.board, possible_moves_repr)
 
-        self.remove_possible_move(board, possible_moves_repr + [choosed_pawn.position.location])
+        self.remove_possible_move(state.board, possible_moves_repr + [choosed_pawn.position.location])
         return (choosed_pawn, moved_pawn)
     
-if __name__ == '__main__':
-    gui = GUI()
-    while True: 
-        event, values = gui.window.read()
-        if (type(event) == tuple):
-            print(event)
-        if event in (None, 'Exit'):
-            gui.window.close()
-            break
