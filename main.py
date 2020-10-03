@@ -1,4 +1,5 @@
 import sys
+import time
 
 from src.halma import Halma
 from src.model import Color, Pawn, Tile
@@ -12,12 +13,18 @@ if __name__ == '__main__':
 	player1, player2 = interface.ask_game_mode()
 	game = Halma(Constant.BOARDSIZE, Constant.BOARDSIZE, Color.RED, interface, player1=player1, player2=player2)
 	game.interface.render(game.state.board)
-
+	gui = GUI()
+	gui.render(game.state.board)
+	while True:
+		gui.render_color_reverse()
+		gui.render(game.state.board)
+		
+	GUI().window.close()
 	# TODO : create a loop for event GUI 
-	try :
-		while True:
-			game.game()
-	except Exception as err:
-		CLIPrompt().show_ending(ending="Game Ended!")
-		sys.exit(1)
+	# try :
+	# 	while True:
+	# 		game.game()
+	# except Exception as err:
+	# 	CLI().show_ending(ending="Game Ended!")
+	# 	sys.exit(1)
 	
