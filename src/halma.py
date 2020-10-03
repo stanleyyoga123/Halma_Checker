@@ -5,10 +5,6 @@ from .model.tile import Tile
 from .model.color import Color
 from .model.pawn import Pawn
 from .model.state import State
-
-from .io.cli_input import CLIInput
-from .io.cli_output import CLIOutput
-
 from .constant import Constant
 
 class Halma():
