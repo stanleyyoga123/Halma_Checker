@@ -64,7 +64,26 @@ class Halma():
 
         self.move()
         self.interface.render(self.state)
+        if(self.win_condition()[0]):
+            # TODO: WIN PLAYER 1
+            a=1
+        elif(self.win_condition()[1]):
+            # TODO: WIN PLAYER 2
+            a=2
         self.next()
+
+    def win_condition(self):
+        '''Winning condition for player
+
+        Returns:
+            Tuple(Boolean, Boolean): index represent player
+        '''
+        if(self.state.player_1.is_win()):
+            return (True, False)
+        elif(self.state.player_2.is_win()):
+            return (False, True)
+        else:
+            return (False, False)
     
     def next(self):
         '''Updating attribute after turn end
