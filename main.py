@@ -1,15 +1,27 @@
+import sys
+import time
+
 from src.halma import Halma
 from src.model import Color, Pawn, Tile
-from src.io import CLIInput, CLIOutput, CLIOpening
+from src.constant import Constant
+from src.io import CLI, GUI
+
 	
 if __name__ == '__main__':
-	CLIOpening().show_title()
-	game_mode = CLIOpening().ask_game_mode()
+	cli = CLI()
+	cli.show_title()
+	player1, player2 = cli.ask_game_mode()
 
-	inputter = CLIInput()
-	outputter = CLIOutput()
-	game = Halma(10, 10, Color.RED, inputter, outputter)
-	game.outputter.show(game.board)
+	interface_type = cli.select_interface()
+	interface = GUI() if interface_type == 'gui' else CLI()
 
-	while True:
-		game.game()
+	game = Halma(Constant.BOARDSIZE, Constant.BOARDSIZE, Color.RED, interface, player1=player1, player2=player2)
+	game.interface.render(game.state)
+
+	try :
+		while True:
+			game.game()
+	except Exception as err:
+		CLI().show_ending(ending="Game Ended!")
+		sys.exit(1)
+	

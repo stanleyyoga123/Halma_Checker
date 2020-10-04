@@ -1,1 +1,1 @@
-pytest --cov --cov-report tests/
+python3 -m pytest --cov --cov-report html tests/

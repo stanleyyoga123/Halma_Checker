@@ -7,7 +7,17 @@ from colorama import Fore, Style
 DEBUG = False
 
 class Board():
+    '''Class Board contains everything on board game.
+    It responsible for everything happens on board
+    '''
     def __init__(self, b_size, pawns, tiles):
+        '''Constuctor
+        
+        Parameters:
+            b_size (int): Board size
+            pawns (list(Pawn)): All Pawns in the board
+            tiles (list(list(Tiles))): Tiles in the board 
+        '''
         self.b_size = b_size
         self.pawns = pawns
         self.tiles = tiles

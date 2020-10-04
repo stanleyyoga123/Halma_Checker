@@ -1,4 +1,4 @@
-from .agent import Agent
+from .bot import Bot
 from .board import Board
 from .color import Color
 from .pawn import Pawn

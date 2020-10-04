@@ -1,26 +1,29 @@
 from .model.player import Player
 from .model.board import Board 
-from .model.agent import Agent
+from .model.bot import Bot
 from .model.tile import Tile 
 from .model.color import Color
 from .model.pawn import Pawn
-
-from .io.cli_input import CLIInput
-from .io.cli_output import CLIOutput
+from .model.state import State
+from .constant import Constant
 
 class Halma():
+    '''Halma class responsible for controlling flow in the game
+    '''
+    def __init__(self, b_size, t_limit, h_player, interface, player1, player2):
+        '''Constructor
 
-    def __init__(self, b_size, t_limit, h_player, inputter, outputter):
-        '''
-        b_size = board size (8, 10, 16)
-        t_limit = time limit
-        h_player = player color
+        Parameters:
+            b_size (int): Board size
+            t_limit (int): Time limit
+            h_player (int): Player color
+            interface (I/O Interface): I/O for game
+            player1 (Player): Player Object representing player 1
+            player2 (Player): Player Object representing player 2
         '''
         # Initialize properties
-        self.inputter = inputter    
-        self.outputter = outputter  
+        self.interface = interface 
 
-        self.turn = 0
         self.t_limit = t_limit
         self.b_size = b_size
         self.h_player = h_player
@@ -29,40 +32,77 @@ class Halma():
         red, green, tiles = self.init_location()
 
         # Initialize Board
-        self.board = Board(b_size, red['pawns'] + green['pawns'], tiles)
+        board = Board(b_size, red['pawns'] + green['pawns'], tiles)
 
         # Init player
-        self.init_player(red, green)
+        player_1, player_2 = self.init_player(red, green, player1, player2)
 
         # History
         self.history = []
 
         # Current Player        
-        self.currentPlayer = self.player_1 if h_player == Color.GREEN else self.player_2
+        currentPlayer = player_1 
+
+        # State
+        self.state = State(board, player_1, player_2, currentPlayer)
 
     def move(self):
-        before, after = self.inputter.input(self.board, self.currentPlayer) 
-        self.board.move_pawn(before, after)
+        '''Method to move pawn
+        '''
+        if repr(self.state.currentPlayer.brain) == Constant.NOBRAIN:
+            before, after = self.interface.input(self.state) 
+            self.state.board.move_pawn(before, after)
+        else :
+            # nanti ganti dari inputer ke minimax -> output tetap sama
+            before, after = self.interface.input(self.state) 
+            self.state.board.move_pawn(before, after)
 
     def game(self):
+        '''Main method for each turn
+        '''
+        self.state.player_2.state = self.state
+
         self.move()
-        self.outputter.show(self.board)
+        self.interface.render(self.state)
         self.next()
-        
     
     def next(self):
-        self.currentPlayer = self.player_2 if self.currentPlayer == self.player_1 else self.player_1
+        '''Updating attribute after turn end
+        '''
+        self.history.append(self.state.deepcopy())
+        self.state.currentPlayer = self.state.player_2 if self.state.currentPlayer == self.state.player_1 else self.state.player_1
+        self.state.turn += 1
+        # self.state.update(self.board, self.state.player_1, self.state.player_2, self.currentPlayer, self.turn)
     
-    def init_player(self, red, green):
-        # Initialize Player
-        if self.h_player == Color.RED:
-            self.player_1 = Player(red['pawns'], Color.RED, red['win_condition'])
-            self.player_2 = Agent(green['pawns'], Color.GREEN, green['win_condition'], self.t_limit)
-        else:
-            self.player_1 = Player(green['pawns'], Color.GREEN, green['win_condition'])
-            self.player_2 = Agent(red['pawns'], Color.RED, red['win_condition'], self.t_limit)
+    def init_player(self, red, green, player1, player2):
+        '''Initialize Player
+        
+        Parameters:
+            red (dict): Red player
+            green (dict): Green player
+            player1 (Player): Player Object representing player 1
+            player2 (Player): Player Object representing player 2
+        
+        Returns:
+            Tuple(Player, Player: Initialized Player
+        '''
+        def closure_init_player(setup, color, player, t_limit):
+            if repr(player.brain) == Constant.NOBRAIN:
+                player.inject(setup.get('pawns'), color, setup.get('win_condition'))
+            else: 
+                player.inject(setup.get('pawns'), color, setup.get('win_condition'), t_limit)
+            return player
+
+        player1 = closure_init_player(red, Color.RED, player1, self.t_limit)
+        player2 = closure_init_player(green, Color.GREEN, player2, self.t_limit)
+        return (player1, player2)
     
     def init_location(self):
+        '''Initialize all location (tiles, winCondition, etc) for green, red, and board
+
+        Returns:
+            Tuple(map, map, list(Tile)): Initialized Location
+        '''
         cur_id = 0
 
         red = {
