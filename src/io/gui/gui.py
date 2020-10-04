@@ -4,31 +4,55 @@ from src.constant import Constant
 from src.model import Color
 
 class GUI():
-    def __init__(self):
+    def __init__(self, b_size):
         self.reverse = False
-        board = [[(i,j) for j in range(Constant.BOARDSIZE)] for i in range(Constant.BOARDSIZE)]
-        axis = [[sg.T("", size=(3,2))] + list(sg.B(i+1, size=(4, 2), pad=(0,0), disabled=True, focus=False, border_width=0, button_color=(("black", sg.theme_background_color())), disabled_button_color=("black", sg.theme_background_color())) for i in range(Constant.BOARDSIZE))]
+        self.b_size = b_size 
 
-        board_layout = [[sg.B(i+1, size=(3, 2), pad=(0,0), disabled=True, focus=False, border_width=0, button_color=(("black", sg.theme_background_color())), disabled_button_color=("black", sg.theme_background_color()))] + [sg.B('', size=(4, 2), key=(i,j), pad=(0,0),focus=False, button_color=("black",self.generate_button_color((i,j))),border_width=0)
-              for j in range(Constant.BOARDSIZE)] for i in range(Constant.BOARDSIZE)]
+        button_size = (4,2) if b_size <= 10 else (2,1)
+
+        board = [[(i,j) for j in range(b_size)] for i in range(b_size)]
+        axis = [[sg.B('X/Y', size=button_size, pad=(0,0), disabled=True,border_width=0, focus=False, button_color=(("black", sg.theme_background_color())), disabled_button_color=("black", sg.theme_background_color()))] 
+                + list(sg.B(i+1, size=button_size, pad=(0,0), disabled=True, focus=False, border_width=0, button_color=(("black", sg.theme_background_color())), disabled_button_color=("black", sg.theme_background_color())) for i in range(b_size))]
+
+        board_layout = [[sg.B(i+1, size=button_size, pad=(0,0), disabled=True, focus=False, border_width=0, button_color=(("black", sg.theme_background_color())), disabled_button_color=("black", sg.theme_background_color()))] 
+                        + [sg.B('', size=button_size, key=(i,j), pad=(0,0),focus=False, button_color=("black",self.generate_button_color((i,j))),border_width=0)
+              for j in range(b_size)] for i in range(b_size)]
 
         layout = axis + board_layout
         self.window = sg.Window('Halma Checker', layout)
-        self.window.Finalize() 
-        
 
+        # init the loading screen
+
+        self.window.Finalize() 
+
+    def init_loading_screen(self):
+        pass
+
+    def init_game_status(self):
+        pass 
+
+    def init_game_board(self):
+        pass
+
+    def find_mirror_end(self, b_size):
+        return {
+            8 : 10,
+            10 : 14,
+            16 : 26
+        }.get(b_size)
+        
     def generate_button_color(self, position):
         if (position[0] + position[1]) % 2 == 0:
-            if (position[0] + position[1]) < 4:
+            if (position[0] + position[1]) < Constant.HALFBOARDCOL:
                 return Constant.LIGHTRED
-            elif (position[0] + position[1] > 14):
+            elif (position[0] + position[1]) > self.find_mirror_end(self.b_size):
                 return Constant.LIGHTGREEN
             else :
                 return Constant.LIGHTBOARD
         else :
-            if (position[0] + position[1]) < 4:
+            if (position[0] + position[1]) < Constant.HALFBOARDCOL:
                 return  Constant.DARKRED
-            elif (position[0] + position[1] > 14):
+            elif (position[0] + position[1]) > self.find_mirror_end(self.b_size):
                 return Constant.DARKGREEN
             else :
                 return  Constant.DARKBOARD

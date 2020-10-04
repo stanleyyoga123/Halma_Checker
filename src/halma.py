@@ -41,7 +41,7 @@ class Halma():
         self.history = []
 
         # Current Player        
-        currentPlayer = player_1 
+        currentPlayer = player_1 if player_1.color == Color.GREEN else player2
 
         # State
         self.state = State(board, player_1, player_2, currentPlayer)
@@ -93,8 +93,13 @@ class Halma():
                 player.inject(setup.get('pawns'), color, setup.get('win_condition'), t_limit)
             return player
 
-        player1 = closure_init_player(red, Color.RED, player1, self.t_limit)
-        player2 = closure_init_player(green, Color.GREEN, player2, self.t_limit)
+        reverse_color = Color.GREEN if Color.RED == self.h_player else Color.RED
+        first_setup = green if self.h_player == Color.GREEN else red 
+        second_setup = red if self.h_player == Color.RED else green
+
+        player1 = closure_init_player(first_setup, self.h_player, player1, self.t_limit)
+        player2 = closure_init_player(second_setup, reverse_color, player2, self.t_limit)
+        
         return (player1, player2)
     
     def init_location(self):

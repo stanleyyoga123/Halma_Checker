@@ -7,6 +7,7 @@ from src.factory import PlayerFactory
 from src.constant import Constant
 
 from .utils import get_style
+from ...model import Color
 
 class CLI():
     def render(self, state):
@@ -51,25 +52,76 @@ class CLI():
         ]
         return prompt(question, style = style_from_dict(get_style()))['pawn']
 
-    def ask_game_mode(self):
+    def ask_game_settings(self) :
+        board_size_maps = {
+            '8x8' : 8,
+            '10x10' : 10,
+            '16x16' : 16
+        }
+
+        game_mode_maps = {
+            'bot vs human' : (PlayerFactory().generate_player(Constant.MINIMAX), PlayerFactory().generate_player(Constant.NOBRAIN)),
+            'bot with local search vs human' : (PlayerFactory().generate_player(Constant.MINMAXWLOCAL), PlayerFactory().generate_player(Constant.NOBRAIN)),
+            'bot vs bot with local search' : (PlayerFactory().generate_player(Constant.MINIMAX), PlayerFactory().generate_player(Constant.MINMAXWLOCAL)) 
+        }
+
+        color_maps = {
+            'red' : Color.RED,
+            'green' : Color.GREEN
+        }
+
+        interface_maps = {
+            "Graphical User Interface (GUI)" : "gui",
+            "Command Line Interface (CLI)" : "cli"
+        }
+
         question = [
+            {
+                'type' : 'list',
+                'name' : 'interface',
+                'message' : "Please choose an interface : ",
+                'choices' : ["Command Line Interface (CLI)", "Graphical User Interface (GUI)"],
+                'filter' : lambda val: interface_maps[val]
+            },
+            {
+                'type': 'list',
+                'name': 'size',
+                'message': 'What board size do you want to play?',
+                'choices': ['8x8', '10x10', '16x16'],
+                'filter': lambda val: board_size_maps[val.lower()]
+            },
+            {
+                'type': 'input',
+                'name': 'time',
+                'message': 'What is the time limit? (default:1) : ',
+                'default' : '1',
+                'validate': lambda val: val.isdigit()
+            },
             {
                 'type': 'list',
                 'name': 'mode',
                 'message': 'What mode do you want to play?',
                 'choices': ['Bot vs Human', 'Bot with Local Search vs Human', 'Bot vs Bot with Local Search'],
-                'filter': lambda val: self.map_answer(val.lower())
+                'filter': lambda val: game_mode_maps[val.lower()]
             }
         ]
-        player1, player2 = prompt(question, style = style_from_dict(get_style()))['mode']
-        return player1, player2
 
-    def map_answer(self,keyword):
-        return  {
-            'bot vs human' : (PlayerFactory().generate_player(Constant.MINIMAX), PlayerFactory().generate_player(Constant.MINIMAX)),
-            'bot with local search vs human' : (PlayerFactory().generate_player(Constant.MINMAXWLOCAL), PlayerFactory().generate_player(Constant.NOBRAIN)),
-            'bot vs bot with local search' : (PlayerFactory().generate_player(Constant.MINIMAX), PlayerFactory().generate_player(Constant.MINMAXWLOCAL)) 
-        }.get(keyword)
+        print("Please enter game settings :")
+        answer = prompt(question, style = style_from_dict(get_style()))
+        if repr(answer['mode'][0].brain) == Constant.NOBRAIN or repr(answer['mode'][1].brain) == Constant.NOBRAIN:
+            color = prompt(
+                {
+                    'type': 'list',
+                    'name': 'color',
+                    'message': 'Please choose color for the player',
+                    'choices': ['Red', 'Green'],
+                    'filter': lambda val: color_maps[val.lower()]
+                }, style = style_from_dict(get_style())
+            )['color']
+            answer['pcolor'] = color
+        
+
+        return answer
 
     def show_title(self, title = "HALMA CHECKER"):
         print(colored.cyan(pyfiglet.figlet_format(title, font = "slant")))
@@ -77,21 +129,6 @@ class CLI():
     def show_ending(self, ending = "Congratulations!!"):
         print(colored.red(pyfiglet.figlet_format(ending, font = "slant")))
     
-    def select_interface(self):
-        map = {
-            "Graphical User Interface (GUI)" : "gui",
-            "Command Line Interface (CLI)" : "cli"
-        }
-        question = [
-            {
-                'type' : 'list',
-                'name' : 'interface',
-                'message' : "Please choose an interface : ",
-                'choices' : ["Command Line Interface (CLI)", "Graphical User Interface (GUI)"],
-                'filter' : lambda val: map[val]
-            }
-        ]
-        return prompt(question, style = style_from_dict(get_style()))['interface']
     
 
 
