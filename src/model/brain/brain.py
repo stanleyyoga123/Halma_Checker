@@ -4,7 +4,7 @@ class Brain(metaclass=ABCMeta):
     '''Base class of brain for the AI implemented in Halma Game
     '''
     @abstractmethod
-    def find_best_move(self, utility_function, state):
+    def find_best_move(self, state):
         '''Find best move
         
         Parameters:
@@ -15,4 +15,3 @@ class Brain(metaclass=ABCMeta):
             State: Next state with best move being done by AI 
         '''
         raise NotImplementedError
-    

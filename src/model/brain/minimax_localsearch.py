@@ -4,7 +4,7 @@ from src.constant import Constant
 class MinimaxLocalSearch(Brain):
     '''Class that implemented Minimax algorithm with local search usage for finding best move in Brain class implementation
     '''
-    def find_best_move(self, utility_function, state):
+    def find_best_move(self, state):
         '''Find best move with minimax + local search
         
         Parameters:
