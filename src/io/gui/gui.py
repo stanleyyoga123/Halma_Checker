@@ -65,7 +65,7 @@ class GUI():
     def render(self, state):
         print ("Game Status : ")
         print(f"Current Player : {str(state.currentPlayer)}")
-        print(f"Current Turn : {state.turn }")
+        print(f"Current Turn : {state.turn + 1}")
         location = [{pawn.position.location : str(pawn)} for pawn in state.board.pawns]
         red_loc = [pawn.position.location for pawn in state.board.pawns if str(pawn) == Constant.PAWNREDTYPE]
         green_loc = [pawn.position.location for pawn in state.board.pawns if str(pawn) == Constant.PAWNGREENTYPE]

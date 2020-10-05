@@ -15,7 +15,7 @@ if __name__ == '__main__':
 	interface_type = settings.get('interface')
 	time_limit = settings.get('time')
 	board_size = settings.get('size')
-	pcolor = settings.get('pcolor') if settings.get('pcolor') is not None else Color.GREEN # only change for player color
+	pcolor = settings.get('pcolor') if settings.get('pcolor') is not None else Color.RED # only change for player color
 	interface = GUI(board_size) if interface_type == 'gui' else CLI()
 
 	if interface_type == 'gui':

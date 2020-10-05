@@ -41,7 +41,7 @@ class Halma():
         self.history = []
 
         # Current Player        
-        currentPlayer = player_1 
+        currentPlayer = player_1 if player_1.color == Color.GREEN else player_2
 
         # State
         self.state = State(board, player_1, player_2, currentPlayer)
@@ -121,11 +121,12 @@ class Halma():
             return player
 
         reverse_color = Color.GREEN if Color.RED == self.h_player else Color.RED
-        first_setup = green if self.h_player == Color.GREEN else red 
-        second_setup = red if self.h_player == Color.RED else green
+        first_setup = green if reverse_color == Color.GREEN else red 
+        second_setup = green if reverse_color == Color.RED else red
 
-        player1 = closure_init_player(first_setup, self.h_player, player1, self.t_limit)
-        player2 = closure_init_player(second_setup, reverse_color, player2, self.t_limit)
+
+        player1 = closure_init_player(first_setup, reverse_color, player1, self.t_limit)
+        player2 = closure_init_player(second_setup, self.h_player, player2, self.t_limit)
         return (player1, player2)
 
     def init_location(self):

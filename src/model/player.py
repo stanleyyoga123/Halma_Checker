@@ -27,7 +27,7 @@ class Player():
         return self.color == player.color
 
     def __str__(self):
-        return str(self.brain)
+        return str(self.brain) + " | " + ('R' if self.color == Color.RED else 'G')
     
     def is_win(self):
         '''Check if player wins

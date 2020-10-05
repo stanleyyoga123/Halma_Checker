@@ -13,7 +13,7 @@ class CLI():
     def render(self, state):
         print ("Game Status : ")
         print(f"Current Player : {str(state.currentPlayer)}")
-        print(f"Current Turn : {state.turn }")
+        print(f"Current Turn : {state.turn + 1}")
 
         print(colored.green(str(state.board)))
 
