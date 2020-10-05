@@ -1,3 +1,5 @@
+from .color import Color
+
 class Player():
     '''Player contains atribute for each player
     '''
