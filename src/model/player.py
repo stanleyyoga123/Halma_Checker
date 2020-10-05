@@ -1,5 +1,3 @@
-from .color import Color
-
 class Player():
     '''Player contains atribute for each player
     '''
@@ -10,6 +8,9 @@ class Player():
             brain(Brain) : Brain injected for the player
         '''
         self.brain = brain
+        
+    def __repr__(self):
+        return self.brain.__repr__()
 
     def inject(self, pawns, color, winCondition):
         '''Dependencies Injection Procedure
@@ -26,5 +27,4 @@ class Player():
     def __eq__(self, player):
         return self.color == player.color
     
-    def get_destination(self, color):
-        return (0,0) if color == Color.GREEN else (self.state.board.b_size-1, self.state.board.b_size-1)
+    

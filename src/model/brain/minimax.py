@@ -8,7 +8,6 @@ class Minimax(Brain):
         '''Find best move with minimax algorithm
         
         Parameters:
-            utility_function (func): Function for getting utility value
             state (State): Current Game State
         
         Returns:

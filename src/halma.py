@@ -54,7 +54,7 @@ class Halma():
             self.state.board.move_pawn(before, after)
         else :
             # nanti ganti dari inputer ke minimax -> output tetap sama
-            before, after = self.interface.input(self.state) 
+            before, after = self.state.currentPlayer.find(self.state)
             self.state.board.move_pawn(before, after)
 
     def game(self):
@@ -123,7 +123,7 @@ class Halma():
                 # Change Tile color to red
                 tiles[i][j].color = Color.RED
                 # Add win condition for green
-                red['win_condition'].append(tiles[i][j])
+                green['win_condition'].append(tiles[i][j])
                 # Add red pawn to list
                 red['pawns'].append(Pawn(cur_id, tiles[i][j], Color.RED))  
                 cur_id += 1
@@ -135,7 +135,7 @@ class Halma():
                 # Change Tile color to green
                 tiles[i][j].color = Color.GREEN
                 # Add win condition for red
-                green['win_condition'].append(tiles[i][j])
+                red['win_condition'].append(tiles[i][j])
                 # Add green pawn to list
                 green['pawns'].append(Pawn(cur_id, tiles[i][j], Color.GREEN))
                 cur_id += 1

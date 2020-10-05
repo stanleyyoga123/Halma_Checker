@@ -65,10 +65,13 @@ class CLI():
         return player1, player2
 
     def map_answer(self,keyword):
+        bot_minimax = PlayerFactory().generate_player(Constant.MINIMAX)
+        bot_minimax_local = PlayerFactory().generate_player(Constant.MINMAXWLOCAL)
+        human = PlayerFactory().generate_player(Constant.NOBRAIN)
         return  {
-            'bot vs human' : (PlayerFactory().generate_player(Constant.MINIMAX), PlayerFactory().generate_player(Constant.MINIMAX)),
-            'bot with local search vs human' : (PlayerFactory().generate_player(Constant.MINMAXWLOCAL), PlayerFactory().generate_player(Constant.NOBRAIN)),
-            'bot vs bot with local search' : (PlayerFactory().generate_player(Constant.MINIMAX), PlayerFactory().generate_player(Constant.MINMAXWLOCAL)) 
+            'bot vs human' : (bot_minimax, human),
+            'bot with local search vs human' : (bot_minimax_local, human),
+            'bot vs bot with local search' : (bot_minimax, bot_minimax_local) 
         }.get(keyword)
 
     def show_title(self, title = "HALMA CHECKER"):
