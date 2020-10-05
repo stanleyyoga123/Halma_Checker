@@ -1,4 +1,5 @@
 import PySimpleGUI as sg
+import time
 
 from src.constant import Constant 
 from src.model import Color
@@ -8,31 +9,35 @@ class GUI():
         self.reverse = False
         self.b_size = b_size 
 
-        button_size = (4,2) if b_size <= 10 else (2,1)
-
-        board = [[(i,j) for j in range(b_size)] for i in range(b_size)]
-        axis = [[sg.B('X/Y', size=button_size, pad=(0,0), disabled=True,border_width=0, focus=False, button_color=(("black", sg.theme_background_color())), disabled_button_color=("black", sg.theme_background_color()))] 
-                + list(sg.B(i+1, size=button_size, pad=(0,0), disabled=True, focus=False, border_width=0, button_color=(("black", sg.theme_background_color())), disabled_button_color=("black", sg.theme_background_color())) for i in range(b_size))]
-
-        board_layout = [[sg.B(i+1, size=button_size, pad=(0,0), disabled=True, focus=False, border_width=0, button_color=(("black", sg.theme_background_color())), disabled_button_color=("black", sg.theme_background_color()))] 
-                        + [sg.B('', size=button_size, key=(i,j), pad=(0,0),focus=False, button_color=("black",self.generate_button_color((i,j))),border_width=0)
-              for j in range(b_size)] for i in range(b_size)]
-
-        layout = axis + board_layout
-        self.window = sg.Window('Halma Checker', layout)
-
-        # init the loading screen
-
-        self.window.Finalize() 
-
     def init_loading_screen(self):
-        pass
+        layout = [
+            [sg.T('HALMA CHECKER!!!', size=(20,3), justification='center')],
+            [sg.ProgressBar(1000, orientation='h', size=(20, 3), key='progbar')]
+        ]
+        self.loading_window = sg.Window('Loading Screen', layout, no_titlebar=False)
+        for i in range(1000):
+            event, values = self.loading_window.read(timeout=5)          
+            self.loading_window['progbar'].update_bar(i + 1)
+        self.loading_window.close()
 
     def init_game_status(self):
         pass 
 
     def init_game_board(self):
-        pass
+        button_size = (4,2) if self.b_size <= 10 else (2,1)
+
+        board = [[(i,j) for j in range(self.b_size)] for i in range(self.b_size)]
+        axis = [[sg.B('X/Y', size=button_size, pad=(0,0), disabled=True,border_width=0, focus=False, button_color=(("black", sg.theme_background_color())), disabled_button_color=("black", sg.theme_background_color()))] 
+                + list(sg.B(i+1, size=button_size, pad=(0,0), disabled=True, focus=False, border_width=0, button_color=(("black", sg.theme_background_color())), disabled_button_color=("black", sg.theme_background_color())) for i in range(self.b_size))]
+
+        board_layout = [[sg.B(i+1, size=button_size, pad=(0,0), disabled=True, focus=False, border_width=0, button_color=(("black", sg.theme_background_color())), disabled_button_color=("black", sg.theme_background_color()))] 
+                        + [sg.B('', size=button_size, key=(i,j), pad=(0,0),focus=False, button_color=("black",self.generate_button_color((i,j))),border_width=0)
+              for j in range(self.b_size)] for i in range(self.b_size)]
+
+        layout = axis + board_layout
+
+        self.window = sg.Window('Halma Checker', layout)
+        self.window.Finalize()
 
     def find_mirror_end(self, b_size):
         return {
@@ -58,6 +63,9 @@ class GUI():
                 return  Constant.DARKBOARD
 
     def render(self, state):
+        print ("Game Status : ")
+        print(f"Current Player : {str(state.currentPlayer)}")
+        print(f"Current Turn : {state.turn }")
         location = [{pawn.position.location : str(pawn)} for pawn in state.board.pawns]
         red_loc = [pawn.position.location for pawn in state.board.pawns if str(pawn) == Constant.PAWNREDTYPE]
         green_loc = [pawn.position.location for pawn in state.board.pawns if str(pawn) == Constant.PAWNGREENTYPE]

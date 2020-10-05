@@ -11,6 +11,10 @@ from ...model import Color
 
 class CLI():
     def render(self, state):
+        print ("Game Status : ")
+        print(f"Current Player : {str(state.currentPlayer)}")
+        print(f"Current Turn : {state.turn }")
+
         print(colored.green(str(state.board)))
 
     def input(self, state):

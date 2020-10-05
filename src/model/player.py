@@ -25,6 +25,9 @@ class Player():
 
     def __eq__(self, player):
         return self.color == player.color
+
+    def __str__(self):
+        return str(self.brain)
     
     def is_win(self):
         '''Check if player wins

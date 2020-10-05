@@ -41,10 +41,13 @@ class Halma():
         self.history = []
 
         # Current Player        
-        currentPlayer = player_1 if player_1.color == Color.GREEN else player2
+        currentPlayer = player_1 
 
         # State
         self.state = State(board, player_1, player_2, currentPlayer)
+
+        # game over state
+        self.game_over = False
 
     def move(self):
         '''Method to move pawn
@@ -60,17 +63,22 @@ class Halma():
     def game(self):
         '''Main method for each turn
         '''
-        self.state.player_2.state = self.state
+        if repr(self.state.currentPlayer.brain) != Constant.NOBRAIN:
+            self.state.currentPlayer.state = self.state
+
+        # check game over state
+        if self.game_over:
+            return
 
         self.move()
-        self.interface.render(self.state)
         if(self.win_condition()[0]):
             # TODO: WIN PLAYER 1
-            a=1
+            self.game_over = True
         elif(self.win_condition()[1]):
             # TODO: WIN PLAYER 2
-            a=2
+            self.game_over = True
         self.next()
+        self.interface.render(self.state)
 
     def win_condition(self):
         '''Winning condition for player
@@ -119,7 +127,7 @@ class Halma():
         player1 = closure_init_player(first_setup, self.h_player, player1, self.t_limit)
         player2 = closure_init_player(second_setup, reverse_color, player2, self.t_limit)
         return (player1, player2)
-    
+
     def init_location(self):
         '''Initialize all location (tiles, winCondition, etc) for green, red, and board
 
@@ -146,7 +154,7 @@ class Halma():
                 # Change Tile color to red
                 tiles[i][j].color = Color.RED
                 # Add win condition for green
-                red['win_condition'].append(tiles[i][j])
+                green['win_condition'].append(tiles[i][j])
                 # Add red pawn to list
                 red['pawns'].append(Pawn(cur_id, tiles[i][j], Color.RED))  
                 cur_id += 1
@@ -158,7 +166,7 @@ class Halma():
                 # Change Tile color to green
                 tiles[i][j].color = Color.GREEN
                 # Add win condition for red
-                green['win_condition'].append(tiles[i][j])
+                red['win_condition'].append(tiles[i][j])
                 # Add green pawn to list
                 green['pawns'].append(Pawn(cur_id, tiles[i][j], Color.GREEN))
                 cur_id += 1

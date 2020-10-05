@@ -34,7 +34,8 @@ class Pawn():
         return self.position.location == pawn.position.location
 
     def __hash__(self):
-        return hash((self.id, self.position, self.color))
+        return hash((self.id, self.position.location, self.color))
+
 
     def temp_copy(self, position):
         '''Create new pawn from current pawn with updated position
