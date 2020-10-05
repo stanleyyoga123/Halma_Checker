@@ -26,5 +26,16 @@ class Player():
     def __eq__(self, player):
         return self.color == player.color
     
+    def is_win(self):
+        '''Check if player wins
+
+        Returns:
+            Boolean: True if all pawns in winCondition tiles, else False
+        '''
+        for pawn in self.pawns:
+            if pawn.position not in self.winCondition:
+                return False
+        return True
+    
     def get_destination(self, color):
         return (0,0) if color == Color.GREEN else (self.state.board.b_size-1, self.state.board.b_size-1)

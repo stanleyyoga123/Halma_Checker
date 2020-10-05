@@ -6,7 +6,6 @@ from src.model import Color, Pawn, Tile
 from src.constant import Constant
 from src.io import CLI, GUI
 
-	
 if __name__ == '__main__': 
 	CLI().show_title()
 

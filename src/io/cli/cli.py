@@ -128,8 +128,5 @@ class CLI():
 
     def show_ending(self, ending = "Congratulations!!"):
         print(colored.red(pyfiglet.figlet_format(ending, font = "slant")))
-    
-    
-
 
     

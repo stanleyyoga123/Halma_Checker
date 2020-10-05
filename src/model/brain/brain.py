@@ -15,4 +15,3 @@ class Brain(metaclass=ABCMeta):
             State: Next state with best move being done by AI 
         '''
         raise NotImplementedError
-    
