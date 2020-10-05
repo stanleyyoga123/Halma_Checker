@@ -49,6 +49,14 @@ class Board():
             out += '\n'
         return out
 
+    def copy(self, board):
+        '''Copy another board to this board
+        
+        Parameters:
+            board (Board): Board will be copied
+        '''
+        self.pawns = board.pawns
+
     def get_pawn(self, location):
         '''Find pawn based on their location in board
 
