@@ -225,3 +225,6 @@ class Board():
         for i, pawn in enumerate(self.pawns):
             if pawn == before:
                 self.pawns[i].copy(after)
+                
+    def get_destination(self, color):
+        return (0,0) if color == Color.GREEN else (self.b_size-1, self.b_size-1)

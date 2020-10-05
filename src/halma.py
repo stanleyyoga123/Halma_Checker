@@ -57,7 +57,7 @@ class Halma():
             self.state.board.move_pawn(before, after)
         else :
             # nanti ganti dari inputer ke minimax -> output tetap sama
-            before, after = self.interface.input(self.state) 
+            before, after = self.state.currentPlayer.find(self.state)
             self.state.board.move_pawn(before, after)
 
     def game(self):

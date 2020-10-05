@@ -63,10 +63,14 @@ class CLI():
             '16x16' : 16
         }
 
+        bot_minimax = PlayerFactory().generate_player(Constant.MINIMAX)
+        bot_minimax_local = PlayerFactory().generate_player(Constant.MINMAXWLOCAL)
+        human = PlayerFactory().generate_player(Constant.NOBRAIN)
+
         game_mode_maps = {
-            'bot vs human' : (PlayerFactory().generate_player(Constant.MINIMAX), PlayerFactory().generate_player(Constant.NOBRAIN)),
-            'bot with local search vs human' : (PlayerFactory().generate_player(Constant.MINMAXWLOCAL), PlayerFactory().generate_player(Constant.NOBRAIN)),
-            'bot vs bot with local search' : (PlayerFactory().generate_player(Constant.MINIMAX), PlayerFactory().generate_player(Constant.MINMAXWLOCAL)) 
+            'bot vs human' : (bot_minimax, human),
+            'bot with local search vs human' : (bot_minimax_local, human),
+            'bot vs bot with local search' : (bot_minimax, bot_minimax_local) 
         }
 
         color_maps = {
