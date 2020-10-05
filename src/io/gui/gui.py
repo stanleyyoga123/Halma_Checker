@@ -4,24 +4,36 @@ import time
 from src.constant import Constant 
 from src.model import Color
 
+from .utils import translate_type
+
 class GUI():
     def __init__(self, b_size):
         self.reverse = False
         self.b_size = b_size 
+        self.window = None
+        self.status_window = None 
+        self.board_window = None
 
     def init_loading_screen(self):
         layout = [
-            [sg.T('HALMA CHECKER!!!', size=(20,3), justification='center')],
-            [sg.ProgressBar(1000, orientation='h', size=(20, 3), key='progbar')]
+            [sg.T('HALMA CHECKER' + Constant.PAWNCHAR, size=(20,3), font='Any 20', justification='center')],
+            [sg.ProgressBar(1000, orientation='h', size=(25, 3), key='progbar')]
         ]
-        self.loading_window = sg.Window('Loading Screen', layout, no_titlebar=False)
+        self.loading_window = sg.Window('Loading Screen', layout, element_justification='center',no_titlebar=True, keep_on_top=True, grab_anywhere=False, alpha_channel=0.75)
         for i in range(1000):
-            event, values = self.loading_window.read(timeout=5)          
+            event, values = self.loading_window.read(timeout=10)          
             self.loading_window['progbar'].update_bar(i + 1)
         self.loading_window.close()
 
     def init_game_status(self):
-        pass 
+        layout = [
+            [sg.T("Halma",size=(20,1), font='Any 30', justification='center')],
+            [sg.T("Turn : ", auto_size_text=True, font='Any 20'), sg.T("", key="turn", auto_size_text=True, font='Any 20') ],
+            [sg.T("Player : ", auto_size_text=True, font='Any 20'), sg.T("", key="player", size=(10,1), font="Any 20") ],
+            [sg.T("Type : ", auto_size_text=True, font='Any 20'), sg.T("", key="type", size=(20,1), font="Any 20") ]
+        ]
+
+        self.status_window = layout
 
     def init_game_board(self):
         button_size = (4,2) if self.b_size <= 10 else (2,1)
@@ -34,10 +46,15 @@ class GUI():
                         + [sg.B('', size=button_size, key=(i,j), pad=(0,0),focus=False, button_color=("black",self.generate_button_color((i,j))),border_width=0)
               for j in range(self.b_size)] for i in range(self.b_size)]
 
-        layout = axis + board_layout
+        self.board_window = axis + board_layout
 
-        self.window = sg.Window('Halma Checker', layout)
-        self.window.Finalize()
+    def init_layout(self):
+        if self.board_window is None or self.status_window is None : 
+            return 
+        
+        self.layout = [
+            [sg.Column(self.board_window), sg.VerticalSeparator(pad=(3,2)), sg.Column(self.status_window, expand_x=True, expand_y=True)],
+            ]
 
     def find_mirror_end(self, b_size):
         return {
@@ -63,9 +80,18 @@ class GUI():
                 return  Constant.DARKBOARD
 
     def render(self, state):
-        print ("Game Status : ")
-        print(f"Current Player : {str(state.currentPlayer)}")
-        print(f"Current Turn : {state.turn + 1}")
+        if self.window is None or self.layout is None : 
+            self.init_game_board()
+            self.init_game_status()
+            self.init_layout()
+            self.window = sg.Window('Halma Checker', self.layout, resizable=False, keep_on_top=True)
+            self.window.Finalize()
+
+        # update game status
+        self.window['turn'].update(state.turn + 1)
+        self.window['player'].update('RED' if state.currentPlayer.color == Color.RED else 'GREEN')
+        self.window['type'].update(translate_type(str(state.currentPlayer.brain)))
+
         location = [{pawn.position.location : str(pawn)} for pawn in state.board.pawns]
         red_loc = [pawn.position.location for pawn in state.board.pawns if str(pawn) == Constant.PAWNREDTYPE]
         green_loc = [pawn.position.location for pawn in state.board.pawns if str(pawn) == Constant.PAWNGREENTYPE]
