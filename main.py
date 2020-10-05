@@ -35,8 +35,8 @@ if __name__ == '__main__':
 
 	while True:
 		game.game()
-		# if game.game_over :
-		# 	break 
+		if game.game_over :
+			break 
 	
 	print("Game end, winner: to be continued")
 	
