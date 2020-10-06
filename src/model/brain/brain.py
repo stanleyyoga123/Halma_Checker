@@ -3,6 +3,10 @@ from abc import ABCMeta, abstractmethod
 class Brain(metaclass=ABCMeta):
     '''Base class of brain for the AI implemented in Halma Game
     '''
+    
+    def inject(self, t_limit):
+        self.t_limit = t_limit
+    
     @abstractmethod
     def find_best_move(self, state):
         '''Find best move
