@@ -137,4 +137,10 @@ class CLI():
     def show_ending(self, ending = "Congratulations!!"):
         print(colored.red(pyfiglet.figlet_format(ending, font = "slant")))
 
+    def show_winner(self, player):
+        if player.color == Color.RED:
+            print(colored.red(pyfiglet.figlet_format("RED WIN!", font = "slant")))
+        elif player.color == Color.GREEN:
+            print(colored.green(pyfiglet.figlet_format("GREEN WIN!", font = "slant")))
+
     

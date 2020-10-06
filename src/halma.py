@@ -65,16 +65,18 @@ class Halma():
         if repr(self.state.currentPlayer.brain) != Constant.NOBRAIN:
             self.state.currentPlayer.state = self.state
 
-        # check game over state
+        # assertion to check if the game not over yet
         if self.game_over:
             return
 
         self.move()
-        if(self.win_condition()[0]):
+
+        if(self.win_condition()[0] or self.win_condition()[1]):
             self.game_over = True
-        elif(self.win_condition()[1]):
-            self.game_over = True
-        self.next()
+            self.interface.show_winner(self.state.currentPlayer)
+        else : 
+            self.next()
+
         self.interface.render(self.state)
 
     def win_condition(self):

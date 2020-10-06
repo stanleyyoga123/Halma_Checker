@@ -13,14 +13,15 @@ class GUI():
         self.window = None
         self.status_window = None 
         self.board_window = None
+        sg.ChangeLookAndFeel('Reddit')
 
     def init_loading_screen(self):
         layout = [
             [sg.T('HALMA CHECKER' + Constant.PAWNCHAR, size=(20,3), font='Any 20', justification='center')],
-            [sg.ProgressBar(1000, orientation='h', size=(25, 3), key='progbar')]
+            [sg.ProgressBar(150, orientation='h', size=(25, 3), key='progbar')]
         ]
-        self.loading_window = sg.Window('Loading Screen', layout, element_justification='center',no_titlebar=True, keep_on_top=True, grab_anywhere=False, alpha_channel=0.75)
-        for i in range(1000):
+        self.loading_window = sg.Window('Loading Screen', layout, element_justification='center',no_titlebar=True, keep_on_top=True, grab_anywhere=False, alpha_channel=0.85)
+        for i in range(150):
             event, values = self.loading_window.read(timeout=10)          
             self.loading_window['progbar'].update_bar(i + 1)
         self.loading_window.close()
@@ -78,6 +79,17 @@ class GUI():
                 return Constant.DARKGREEN
             else :
                 return  Constant.DARKBOARD
+    
+    def show_winner(self, player):
+        color = "GREEN" if player.color == Color.GREEN else "RED"
+        layout = [
+             [sg.T("Congratulations!!!", font="Any 20")],
+             [sg.T(Constant.PAWNCHAR + str(color) + Constant.PAWNCHAR, font="Any 20",text_color= color.lower(), justification="center")],
+             [sg.B('OK', font="Any 15", auto_size_button=True)]
+        ]
+        
+        sg.Window('',layout, force_toplevel=True, no_titlebar=True, element_justification="center", keep_on_top=True).read(close=True)
+        
 
     def render(self, state):
         if self.window is None or self.layout is None : 

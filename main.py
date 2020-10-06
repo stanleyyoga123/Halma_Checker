@@ -19,7 +19,7 @@ if __name__ == '__main__':
 	interface = GUI(board_size) if interface_type == 'gui' else CLI()
 
 	if interface_type == 'gui':
-		#interface.init_loading_screen() #-> open only for loading screen
+		interface.init_loading_screen() #-> open only for loading screen
 		interface.init_game_board()
 
 	# Start the game
