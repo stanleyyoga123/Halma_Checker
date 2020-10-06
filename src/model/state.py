@@ -46,3 +46,16 @@ class State():
 
         # TODO: Need to deepcopy for all object parameter
         return copy.deepcopy(self)
+
+    def win_condition(self):
+        '''Winning condition for player
+
+        Returns:
+            Tuple(Boolean, Boolean): index represent player
+        '''
+        if(self.player_1.is_win()):
+            return (True, False)
+        elif(self.player_2.is_win()):
+            return (False, True)
+        else:
+            return (False, False)
