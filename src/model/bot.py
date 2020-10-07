@@ -19,7 +19,7 @@ class Bot(Player):
     
     def inject(self, pawns, color, winCondition, t_limit):
         super().inject(pawns, color,winCondition)
-        self.t_limit = t_limit
+        self.brain.inject(float(t_limit))
 
     def find(self, state):
         return self.brain.find_best_move(state)
