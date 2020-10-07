@@ -111,9 +111,9 @@ class GUI():
         for i in range(state.board.b_size):
             for j in range(state.board.b_size):
                 if (i,j) in red_loc:
-                    self.window[(i,j)].update(Constant.PAWNCHAR, button_color = (Constant.PAWNRED, self.generate_button_color((i,j))), disabled=True)
+                    self.window[(i,j)].update(Constant.PAWNCHAR, disabled_button_color = (Constant.PAWNRED, self.generate_button_color((i,j))), button_color = (Constant.PAWNRED, self.generate_button_color((i,j))), disabled=True)
                 elif (i,j) in green_loc:
-                    self.window[(i,j)].update(Constant.PAWNCHAR, button_color = (Constant.PAWNGREEN, self.generate_button_color((i,j))), disabled=True)
+                    self.window[(i,j)].update(Constant.PAWNCHAR, disabled_button_color = (Constant.PAWNGREEN, self.generate_button_color((i,j))),button_color = (Constant.PAWNGREEN, self.generate_button_color((i,j))), disabled=True)
                 else:
                     self.window[(i,j)].update("",disabled=True)
         self.window.read(timeout=10)
