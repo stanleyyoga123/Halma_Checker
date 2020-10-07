@@ -107,6 +107,7 @@ class GUI():
         location = [{pawn.position.location : str(pawn)} for pawn in state.board.pawns]
         red_loc = [pawn.position.location for pawn in state.board.pawns if str(pawn) == Constant.PAWNREDTYPE]
         green_loc = [pawn.position.location for pawn in state.board.pawns if str(pawn) == Constant.PAWNGREENTYPE]
+
         for i in range(state.board.b_size):
             for j in range(state.board.b_size):
                 if (i,j) in red_loc:
@@ -114,7 +115,7 @@ class GUI():
                 elif (i,j) in green_loc:
                     self.window[(i,j)].update(Constant.PAWNCHAR, button_color = (Constant.PAWNGREEN, self.generate_button_color((i,j))), disabled=True)
                 else:
-                    self.window[(i,j)].update(disabled=True)
+                    self.window[(i,j)].update("",disabled=True)
         self.window.read(timeout=10)
 
     def render_possible_move(self, board, possible_move, color):
@@ -124,12 +125,11 @@ class GUI():
                     self.window[(i,j)].update(Constant.TARGETCHAR, disabled=False, button_color = (Constant.NORMAL, Constant.POSSIBLERED if color == Color.RED else Constant.POSSIBLEGREEN))
         self.window.read(timeout=10)
 
-    def remove_possible_move(self, board, possible_move):
-        for i in range(board.b_size):
-            for j in range(board.b_size):
+    def remove_possible_move(self, possible_move):
+        for i in range(self.b_size):
+            for j in range(self.b_size):
                 if (i, j) in possible_move:
                     self.window[(i,j)].update("", disabled=True, button_color=(Constant.NORMAL, self.generate_button_color((i,j))))
-        
 
     def input(self, state):
         if state.currentPlayer.color == Color.RED:
@@ -164,6 +164,6 @@ class GUI():
             else : 
                  self.remove_possible_move(state.board, possible_moves_repr)
 
-        self.remove_possible_move(state.board, possible_moves_repr + [choosed_pawn.position.location])
+        self.remove_possible_move(possible_moves_repr)
         return (choosed_pawn, moved_pawn)
     
