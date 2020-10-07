@@ -57,6 +57,7 @@ class Halma():
             self.state.board.move_pawn(before, after)
         else :
             before, after = self.state.currentPlayer.find(self.state)
+            print(before.__repr__(), after.__repr__())
             self.state.board.move_pawn(before, after)
 
     def game(self):
@@ -83,8 +84,7 @@ class Halma():
         '''Updating attribute after turn end
         '''
         self.history.append(self.state.deepcopy())
-        self.state.currentPlayer = self.state.player_2 if self.state.currentPlayer == self.state.player_1 else self.state.player_1
-        self.state.turn += 1
+        self.state.next_turn()
         # self.state.update(self.board, self.state.player_1, self.state.player_2, self.currentPlayer, self.turn)
     
     def init_player(self, red, green, player1, player2):

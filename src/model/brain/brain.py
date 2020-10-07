@@ -5,22 +5,18 @@ class Brain(metaclass=ABCMeta):
     '''Base class of brain for the AI implemented in Halma Game
     '''
     
-    def reset(self, depth = 3):
+    def reset(self):
         """Reset attributes
-
-        Args:
-            depth (int, optional): max depth of tree. Defaults to 3.
         """
-        self.depth = 3
-        self.alpha = None
-        self.beta = None
+        self.alpha = float('-inf')
+        self.beta = float('inf')
         self.thinking_time = time() + self.t_limit
     
     def inject(self, t_limit):
         self.t_limit = t_limit
     
     @abstractmethod
-    def find_best_move(self, state):
+    def find_best_move(self, state, max_depth = 3):
         '''Find best move
         
         Parameters:

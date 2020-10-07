@@ -30,13 +30,17 @@ class Utility():
             int: Cost state 
         '''
         current_player = state.currentPlayer
+        opponent_player = state.player_1 if current_player == state.player_2 else state.player_2
         destination = state.board.get_destination(current_player.color)
         
-        cost = 0
+        cost = 1000
         for pawn in current_player.pawns:
+            cost -= Utility.distance(pawn.position.location, destination)
+            
+        for pawn in opponent_player.pawns:
             cost += Utility.distance(pawn.position.location, destination)
         
-        if current_player == state.player_1: #Jika Bot
+        if current_player == state.player_2: #Jika Human
             cost *= -1
         
         return cost

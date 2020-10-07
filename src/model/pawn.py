@@ -29,6 +29,12 @@ class Pawn():
             return 'R'
         else:
             return 'G'
+        
+    def __repr__(self):
+        if self.color == Color.RED:
+            return f'(R {self.position})'
+        else:
+            return f'(G {self.position})'
 
     def __eq__(self, pawn):
         return self.position.location == pawn.position.location

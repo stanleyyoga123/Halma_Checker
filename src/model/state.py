@@ -36,6 +36,14 @@ class State():
     
     def __str__(self):
         return self.board.__str__()
+    
+    def next_turn(self):
+        self.currentPlayer = self.player_2 if self.currentPlayer == self.player_1 else self.player_1
+        self.turn += 1
+        
+    def undo_turn(self):
+        self.currentPlayer = self.player_2 if self.currentPlayer == self.player_1 else self.player_1
+        self.turn -= 1
 
     def deepcopy(self):
         '''Copy State
@@ -59,3 +67,13 @@ class State():
             return (False, True)
         else:
             return (False, False)
+        
+    def current_player_possible_moves(self):
+        """Get all possible moves of current player
+
+        Returns:
+            List(dict(from: Pawn, to: List(Pawn))): list of dict of (pawn and list of possible moves that pawn)
+        """
+        return list((map(
+            lambda pawn: {'from': pawn, 'to':self.board.possible_moves(pawn)}, 
+            self.currentPlayer.pawns)))
