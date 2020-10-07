@@ -56,7 +56,9 @@ class Halma():
             before, after = self.interface.input(self.state) 
             self.state.board.move_pawn(before, after)
         else :
-            before, after = self.state.currentPlayer.find(self.state)
+            # before, after = self.state.currentPlayer.find(self.state)
+            # self.state.board.move_pawn(before, after)
+            before, after = self.interface.input(self.state) 
             self.state.board.move_pawn(before, after)
 
     def game(self):

@@ -18,13 +18,20 @@ class CLI():
         print(colored.green(str(state.board)))
 
     def input(self, state):
-        pawns = [f"Pawns at {pawn.position}" for pawn in state.currentPlayer.pawns]
-        i_choosed_pawn = self.ask_pawn(pawns)
-        choosed_pawn = state.currentPlayer.pawns[i_choosed_pawn]
+        found = False
+        while not found:
+            pawns = [f"Pawns at {pawn.position}" for pawn in state.currentPlayer.pawns]
+            i_choosed_pawn = self.ask_pawn(pawns)
+            choosed_pawn = state.currentPlayer.pawns[i_choosed_pawn]
 
-        possible_moves = state.board.possible_moves(choosed_pawn)
-        possible_moves_str = [f"Pawn to {pawn.position}" for pawn in possible_moves]
-        i_moved_pawn = self.ask_movement(possible_moves_str)
+            possible_moves = state.board.possible_moves(choosed_pawn)
+
+            if len(possible_moves) <= 0:
+                continue
+
+            possible_moves_str = [f"Pawn to {pawn.position}" for pawn in possible_moves]
+            i_moved_pawn = self.ask_movement(possible_moves_str)
+            found = True
 
         moved_pawn = possible_moves[i_moved_pawn] 
         print(f'You Choose Pawn from {choosed_pawn.position} Move to {moved_pawn.position}')
