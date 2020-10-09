@@ -162,7 +162,7 @@ class GUI():
                 moved_pawn = possible_moves[possible_moves_repr.index(event)]
                 break
             else : 
-                 self.remove_possible_move(state.board, possible_moves_repr)
+                 self.remove_possible_move(possible_moves_repr)
 
         self.remove_possible_move(possible_moves_repr)
         return (choosed_pawn, moved_pawn)
