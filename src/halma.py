@@ -7,6 +7,8 @@ from .model.pawn import Pawn
 from .model.state import State
 from .constant import Constant
 
+import time
+
 class Halma():
     '''Halma class responsible for controlling flow in the game
     '''
@@ -74,6 +76,7 @@ class Halma():
 
         if(self.state.win_condition()[0] or self.state.win_condition()[1]):
             self.game_over = True
+            self.interface.render(self.state)
             self.interface.show_winner(self.state.currentPlayer)
         else : 
             self.next()

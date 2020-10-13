@@ -17,12 +17,16 @@ pip install -r requirements.txt
 ```
 
 ### How to setup
-1. Create a virtualenv
+1. Install virtualenv if you haven't
+```bash
+pip install virtualenv
+```
+2. Create a virtualenv
 ```bash
 $ virtualenv venv
 ```
-2. Activate the env (refer to prev section)
-3. Download required dependencies (refer to prev section)
+3. Activate the env (refer to prev section)
+4. Download required dependencies (refer to prev section)
 
 ### Adding dependencies
 ```bash

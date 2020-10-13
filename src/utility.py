@@ -38,11 +38,19 @@ class Utility():
         cost = 100
         for pawn in current_player.pawns:
             # print(Utility.distance(pawn.position.location, destination))
-            cost -= Utility.distance(pawn.position.location, destination)
+            if pawn.position in current_player.winCondition:
+                mult = 1
+            else:
+                mult = 0
+            cost -= Utility.distance(pawn.position.location, destination) - mult
             # print(pawn.position, pawn.position != Tile(0,0,1))
             
         for pawn in opponent_player.pawns:
-            cost += Utility.distance(pawn.position.location, destination)
+            if pawn.position in opponent_player.winCondition:
+                mult = 1
+            else:
+                mult = 0
+            cost += Utility.distance(pawn.position.location, destination) + mult
         
         if current_player == state.player_2: #Jika Human
             cost *= -1

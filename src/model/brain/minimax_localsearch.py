@@ -28,7 +28,7 @@ class MinimaxLocalSearch(Brain):
     
     def terminate(self, depth, state):
         p1_win, p2_win = state.win_condition()
-        if time() > self.thinking_time: print("TIME'S UP")
+        # if time() > self.thinking_time: print("TIME'S UP")
         return depth == self.max_depth or p1_win or p2_win or time() > self.thinking_time
     
     def minimax(self, state, is_max, depth = 0, alpha=float("-inf"), beta=float("inf")):
@@ -62,7 +62,7 @@ class MinimaxLocalSearch(Brain):
             for to in move['to']:
                 
                 if time() > self.thinking_time:
-                    print("TIMEOUT")
+                    # print("TIMEOUT")
                     return best_move, best_move_val
                 
                 temp_state.board.move_pawn(move['from'], to)
@@ -84,10 +84,10 @@ class MinimaxLocalSearch(Brain):
                     beta = min(val, beta)
                 
                 if beta <= alpha:
-                    print("PRUNING", best_move, best_move_val)
+                    # print("PRUNING", best_move, best_move_val)
                     return best_move, best_move_val
                 
-        print("LANCAR", best_move, best_move_val)
+        # print("LANCAR", best_move, best_move_val)
         return best_move, best_move_val
     
     def local_search(self, current_state, possible_moves):
@@ -131,6 +131,11 @@ class MinimaxLocalSearch(Brain):
         self.max_depth = max_depth
         self.which_player = state.currentPlayer
         best_moves, _ = self.minimax(state, state.currentPlayer == state.player_2)
+        if best_moves == None:
+            possible_moves = state.current_player_possible_moves()
+            move = random.choice(list(possible_moves))
+            move_to_random = random.choice(list(move['to']))
+            return (move['from'], move_to_random)
         return best_moves
 
     def __repr__(self):
