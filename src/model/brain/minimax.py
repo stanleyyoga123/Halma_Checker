@@ -10,7 +10,7 @@ class Minimax(Brain):
 
     def terminate(self, depth, state):
         p1_win, p2_win = state.win_condition()
-        if time() > self.thinking_time: print("TIME'S UP")
+        # if time() > self.thinking_time: print("TIME'S UP")
         return depth == self.max_depth or p1_win or p2_win or time() > self.thinking_time
      
     def minimax(self, state, is_max, depth = 0, alpha=float("-inf"), beta=float("inf")):
@@ -37,7 +37,7 @@ class Minimax(Brain):
             for to in move['to']:
                 
                 if time() > self.thinking_time:
-                    print("TIMEOUT")
+                    # print("TIMEOUT")
                     return best_move, best_move_val
                 
                 temp_state.board.move_pawn(move['from'], to)

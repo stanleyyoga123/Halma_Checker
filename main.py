@@ -38,5 +38,5 @@ if __name__ == '__main__':
 		if game.game_over :
 			break 
 	
-	print("Game end, winner: to be continued")
+	print("Game end, winner: ", game.state.currentPlayer)
 	
