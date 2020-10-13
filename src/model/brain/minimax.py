@@ -75,7 +75,9 @@ class Minimax(Brain):
         '''
         self.reset()
         self.max_depth = max_depth
+        start_time = time()
         best_moves, _ = self.minimax(state, state.currentPlayer == state.player_2)
+        print(f"Computing time: {time() - start_time} seconds\n")
         if best_moves == None:
             possible_moves = state.current_player_possible_moves()
             move = random.choice(list(possible_moves))
