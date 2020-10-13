@@ -35,18 +35,21 @@ class Board():
     def __str__(self):
         out = ''
         is_pawn = False
-        for i in range(self.b_size):
+        for i in range(self.b_size+1):
             for j in range(self.b_size):
-                # Find pawn in tiles
-                for pawn in self.pawns:
-                    if pawn.position.location == (i,j):
-                        is_pawn = True
-                        out += pawn.__str__()
-                if not is_pawn:
-                    out += '.'
-                out += ' '
-                is_pawn = False
-            out += '\n'
+                if i < self.b_size:
+                    # Find pawn in tiles
+                    for pawn in self.pawns:
+                        if pawn.position.location == (i,j):
+                            is_pawn = True
+                            out += pawn.__str__()
+                    if not is_pawn:
+                        out += '.'
+                    out += ' '
+                    is_pawn = False
+                else:
+                    out +=  f'{j} '
+            out += f'{i}\n' if i < self.b_size else '\n'
         return out
 
     def get_pawn(self, location):
@@ -222,3 +225,6 @@ class Board():
         for i, pawn in enumerate(self.pawns):
             if pawn == before:
                 self.pawns[i].copy(after)
+                
+    def get_destination(self, color):
+        return (0,0) if color == Color.GREEN else (self.b_size-1, self.b_size-1)

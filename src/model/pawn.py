@@ -29,12 +29,19 @@ class Pawn():
             return 'R'
         else:
             return 'G'
+        
+    def __repr__(self):
+        if self.color == Color.RED:
+            return f'(R {self.position})'
+        else:
+            return f'(G {self.position})'
 
     def __eq__(self, pawn):
         return self.position.location == pawn.position.location
 
     def __hash__(self):
-        return hash((self.id, self.position, self.color))
+        return hash((self.id, self.position.location, self.color))
+
 
     def temp_copy(self, position):
         '''Create new pawn from current pawn with updated position
