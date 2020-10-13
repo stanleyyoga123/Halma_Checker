@@ -84,10 +84,8 @@ class MinimaxLocalSearch(Brain):
                     beta = min(val, beta)
                 
                 if beta <= alpha:
-                    print("PRUNING", best_move, best_move_val)
                     return best_move, best_move_val
-                
-        print("LANCAR", best_move, best_move_val)
+        
         return best_move, best_move_val
     
     def local_search(self, current_state, possible_moves):

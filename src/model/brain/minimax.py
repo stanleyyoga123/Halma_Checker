@@ -57,13 +57,11 @@ class Minimax(Brain):
                     beta = min(val, beta)
                 
                 if beta <= alpha: #pruning
-                    print("PRUNING", best_move, best_move_val)
                     return best_move, best_move_val
                 
-        print("LANCAR", best_move, best_move_val)
         return best_move, best_move_val
     
-    def find_best_move(self, state, max_depth = 2):
+    def find_best_move(self, state, max_depth = 3):
         '''Find best move with minimax + local search
         
         Parameters:
@@ -74,7 +72,8 @@ class Minimax(Brain):
         '''
         self.reset()
         self.max_depth = max_depth
-        best_moves, _ = self.minimax(state, state.currentPlayer == state.player_2)
+        best_moves, val = self.minimax(state, state.currentPlayer == state.player_2)
+        print(val)
         return best_moves
 
     def __repr__(self):

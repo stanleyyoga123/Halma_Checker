@@ -7,6 +7,8 @@ from .model.pawn import Pawn
 from .model.state import State
 from .constant import Constant
 
+import time
+
 class Halma():
     '''Halma class responsible for controlling flow in the game
     '''
