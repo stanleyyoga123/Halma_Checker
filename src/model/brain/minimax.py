@@ -2,6 +2,7 @@ from .brain import Brain
 from src.constant import Constant
 from src.utility import Utility
 from time import time
+import random
 
 class Minimax(Brain):
     '''Class that implemented Minimax algorithm for finding best move in Brain class implementation
@@ -57,13 +58,13 @@ class Minimax(Brain):
                     beta = min(val, beta)
                 
                 if beta <= alpha: #pruning
-                    print("PRUNING", best_move, best_move_val)
+                    # print("PRUNING", best_move, best_move_val)
                     return best_move, best_move_val
                 
-        print("LANCAR", best_move, best_move_val)
+        # print("LANCAR", best_move, best_move_val)
         return best_move, best_move_val
     
-    def find_best_move(self, state, max_depth = 2):
+    def find_best_move(self, state, max_depth = 5):
         '''Find best move with minimax + local search
         
         Parameters:
@@ -75,6 +76,11 @@ class Minimax(Brain):
         self.reset()
         self.max_depth = max_depth
         best_moves, _ = self.minimax(state, state.currentPlayer == state.player_2)
+        if best_moves == None:
+            possible_moves = state.current_player_possible_moves()
+            move = random.choice(list(possible_moves))
+            move_to_random = random.choice(list(move['to']))
+            return (move['from'], move_to_random)
         return best_moves
 
     def __repr__(self):
