@@ -8,8 +8,6 @@ class Brain(metaclass=ABCMeta):
     def reset(self):
         """Reset attributes
         """
-        self.alpha = float('-inf')
-        self.beta = float('inf')
         self.thinking_time = time() + self.t_limit
     
     def inject(self, t_limit):

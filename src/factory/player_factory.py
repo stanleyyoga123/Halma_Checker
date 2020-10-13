@@ -18,6 +18,7 @@ class PlayerFactory():
         '''
         if brain_type == Constant.NOBRAIN:
             return Player(NoBrain())
+            return Bot(MinimaxLocalSearch())
         
         elif brain_type == Constant.MINIMAX:
             return Bot(Minimax())

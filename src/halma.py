@@ -57,7 +57,7 @@ class Halma():
             self.state.board.move_pawn(before, after)
         else :
             before, after = self.state.currentPlayer.find(self.state)
-            print(before.__repr__(), after.__repr__())
+            # print(before.__repr__(), after.__repr__())
             self.state.board.move_pawn(before, after)
 
     def game(self):

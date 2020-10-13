@@ -18,6 +18,9 @@ class State():
         self.currentPlayer = currentPlayer
         self.turn = 0
 
+    def opponent_player(self):
+        return self.player_1 if self.currentPlayer == self.player_1 else self.player_2
+
     def update(self, board, player_1, player_2, currentPlayer, turn):
         '''Change State attribute
         
