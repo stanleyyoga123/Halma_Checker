@@ -39,7 +39,7 @@ class Utility():
         for pawn in current_player.pawns:
             # print(Utility.distance(pawn.position.location, destination))
             if pawn.position in current_player.winCondition:
-                mult = 2
+                mult = 8
             else:
                 mult = 1
             cost -= Utility.distance(pawn.position.location, destination) * mult
@@ -47,7 +47,7 @@ class Utility():
             
         for pawn in opponent_player.pawns:
             if pawn.position in opponent_player.winCondition:
-                mult = 2
+                mult = 8
             else:
                 mult = 1
             cost += Utility.distance(pawn.position.location, destination) * mult
