@@ -12,6 +12,11 @@ class Brain(metaclass=ABCMeta):
     
     def inject(self, t_limit):
         self.t_limit = t_limit
+        
+    def terminate(self, depth, state):
+        p1_win, p2_win = state.win_condition()
+        # if time() > self.thinking_time: print("TIME'S UP")
+        return depth == self.max_depth or p1_win or p2_win or time() > self.thinking_time
     
     @abstractmethod
     def find_best_move(self, state, max_depth = 3):

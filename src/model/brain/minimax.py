@@ -7,11 +7,6 @@ import random
 class Minimax(Brain):
     '''Class that implemented Minimax algorithm for finding best move in Brain class implementation
     '''
-
-    def terminate(self, depth, state):
-        p1_win, p2_win = state.win_condition()
-        # if time() > self.thinking_time: print("TIME'S UP")
-        return depth == self.max_depth or p1_win or p2_win or time() > self.thinking_time
      
     def minimax(self, state, is_max, depth = 0, alpha=float("-inf"), beta=float("inf")):
         """Minimax Algorithm for solving Halma Checker

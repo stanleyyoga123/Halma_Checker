@@ -2,7 +2,7 @@ from .brain import Brain
 from src.constant import Constant
 from src.utility import Utility
 from time import time
-from random import randint
+from random import randint, choice
 from math import exp
 
 class MinimaxLocalSearch(Brain):
@@ -26,11 +26,6 @@ class MinimaxLocalSearch(Brain):
             possible_moves.pop(rand_idx)
         return selected_move if selected_move and len(selected_move['to']) else None, possible_moves
     
-    def terminate(self, depth, state):
-        p1_win, p2_win = state.win_condition()
-        # if time() > self.thinking_time: print("TIME'S UP")
-        return depth == self.max_depth or p1_win or p2_win or time() > self.thinking_time
-    
     def minimax(self, state, is_max, depth = 0, alpha=float("-inf"), beta=float("inf")):
         """Minimax Algorithm for solving Halma Checker
 
@@ -49,7 +44,6 @@ class MinimaxLocalSearch(Brain):
         possible_moves = state.current_player_possible_moves()
         temp_state = state.deepcopy()
         
-        # print(possible_moves)
         if self.which_player == state.currentPlayer: 
             # Jika giliran bot player, maka jalankan localsearch untuk mengambil beberapa possible moves saja
             possible_moves = self.local_search(temp_state, possible_moves)
@@ -68,7 +62,6 @@ class MinimaxLocalSearch(Brain):
                 temp_state.board.move_pawn(move['from'], to)
                 temp_state.next_turn()
                 _, val = self.minimax(temp_state, not(is_max), depth+1, alpha, beta)
-                # print("RECCC VAL", val)
                 
                 temp_state.board.move_pawn(to, move['from'])
                 temp_state.undo_turn()
@@ -104,20 +97,23 @@ class MinimaxLocalSearch(Brain):
         #1/5 dari batas waktu setiap depth (asumsi waktu alokasi tiap depth uniform, 
         # dan butuh 4/5 waktu untuk menelusuri pohon) 
         sa_time = time() + self.t_limit/(self.max_depth*5)
+        current_value = Utility.utility_function(current_state)
         generated_moves = []
         while True:
             curr_time = sa_time - time()
             if curr_time <= 0 or not possible_moves: return generated_moves
             next_move, possible_moves = self.generate_random_move(possible_moves)
-            # temp_state = current_state.deepcopy()
-            # current_state.board.move_pawn(next_move['from'], next_move['to'][0])
             if next_move:
-                delta_e = Utility.distance(next_move['to'][0].position.location, current_state.board.get_destination(current_state.currentPlayer.color)) - Utility.distance(next_move['from'].position.location, current_state.board.get_destination(current_state.currentPlayer.color))
-                # current_state.board.move_pawn(next_move['to'][0], next_move['from'])
-                if delta_e > 0.5: generated_moves.append(next_move)
+                delta_e = self.generate_delta_e(next_move, current_state, current_value)
+                if delta_e > 0: generated_moves.append(next_move)
                 elif exp(delta_e/curr_time): generated_moves.append(next_move)
-                # print("DELTA E", exp(delta_e/curr_time))
             
+    def generate_delta_e(self, next_move, current_state, current_value):
+        current_state.board.move_pawn(next_move['from'], next_move['to'][0])
+        next_value = Utility.utility_function(current_state)
+        current_state.board.move_pawn(next_move['to'][0], next_move['from'])
+        return next_value - current_value
+    
     def find_best_move(self, state, max_depth = 3):
         '''Find best move with minimax + local search
         
@@ -130,11 +126,13 @@ class MinimaxLocalSearch(Brain):
         self.reset()
         self.max_depth = max_depth
         self.which_player = state.currentPlayer
+        start_time = time()
         best_moves, _ = self.minimax(state, state.currentPlayer == state.player_2)
+        print(f"Computing time: {time() - start_time} seconds\n")
         if best_moves == None:
             possible_moves = state.current_player_possible_moves()
-            move = random.choice(list(possible_moves))
-            move_to_random = random.choice(list(move['to']))
+            move = choice(list(possible_moves))
+            move_to_random = choice(list(move['to']))
             return (move['from'], move_to_random)
         return best_moves
 
