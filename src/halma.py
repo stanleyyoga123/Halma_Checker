@@ -7,6 +7,8 @@ from .model.pawn import Pawn
 from .model.state import State
 from .constant import Constant
 
+import time
+
 class Halma():
     '''Halma class responsible for controlling flow in the game
     '''
@@ -56,9 +58,8 @@ class Halma():
             before, after = self.interface.input(self.state) 
             self.state.board.move_pawn(before, after)
         else :
-            # before, after = self.state.currentPlayer.find(self.state)
-            # self.state.board.move_pawn(before, after)
-            before, after = self.interface.input(self.state) 
+            before, after = self.state.currentPlayer.find(self.state)
+            # print(before.__repr__(), after.__repr__())
             self.state.board.move_pawn(before, after)
 
     def game(self):
@@ -75,6 +76,7 @@ class Halma():
 
         if(self.state.win_condition()[0] or self.state.win_condition()[1]):
             self.game_over = True
+            self.interface.render(self.state)
             self.interface.show_winner(self.state.currentPlayer)
         else : 
             self.next()
@@ -85,8 +87,7 @@ class Halma():
         '''Updating attribute after turn end
         '''
         self.history.append(self.state.deepcopy())
-        self.state.currentPlayer = self.state.player_2 if self.state.currentPlayer == self.state.player_1 else self.state.player_1
-        self.state.turn += 1
+        self.state.next_turn()
         # self.state.update(self.board, self.state.player_1, self.state.player_2, self.currentPlayer, self.turn)
     
     def init_player(self, red, green, player1, player2):

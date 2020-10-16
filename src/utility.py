@@ -1,3 +1,5 @@
+from src.model.tile import Tile
+
 class Utility():
     '''Class for general function that can be used on all class
     '''
@@ -30,13 +32,27 @@ class Utility():
             int: Cost state 
         '''
         current_player = state.currentPlayer
+        opponent_player = state.player_1 if current_player == state.player_2 else state.player_2
         destination = state.board.get_destination(current_player.color)
         
-        cost = 0
+        cost = 100
         for pawn in current_player.pawns:
-            cost += Utility.distance(pawn.position.location, destination)
+            # print(Utility.distance(pawn.position.location, destination))
+            if pawn.position in current_player.winCondition:
+                mult = 1
+            else:
+                mult = 0
+            cost -= Utility.distance(pawn.position.location, destination) - mult
+            # print(pawn.position, pawn.position != Tile(0,0,1))
+            
+        for pawn in opponent_player.pawns:
+            if pawn.position in opponent_player.winCondition:
+                mult = 1
+            else:
+                mult = 0
+            cost += Utility.distance(pawn.position.location, destination) + mult
         
-        if current_player == state.player_1: #Jika Bot
+        if current_player == state.player_2: #Jika Human
             cost *= -1
         
         return cost

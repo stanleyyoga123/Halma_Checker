@@ -108,8 +108,8 @@ class CLI():
             {
                 'type': 'input',
                 'name': 'time',
-                'message': 'What is the time limit? (default:1) : ',
-                'default' : '1',
+                'message': 'What is the time limit? (default:5) : ',
+                'default' : '5',
                 'validate': lambda val: val.isdigit()
             },
             {
