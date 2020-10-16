@@ -10,11 +10,11 @@ from .utils import get_style
 from ...model import Color
 
 class CLI():
-    def render(self, state):
+    def render(self, state, time=None):
         print ("Game Status : ")
         print(f"Current Player : {str(state.currentPlayer)}")
         print(f"Current Turn : {state.turn + 1}")
-
+        print(f"Computing Time : {time if time != None else '-'} seconds\n")
         print(colored.green(str(state.board)))
 
     def input(self, state):

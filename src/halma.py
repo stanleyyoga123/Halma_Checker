@@ -55,9 +55,9 @@ class Halma():
             self.state.board.move_pawn(before, after)
         else :
             (before, after), time = self.state.currentPlayer.find(self.state)
-            # Silakan dipake time nya
-            print(f"Computing time: {time} seconds\n")
             self.state.board.move_pawn(before, after)
+            return time
+        return None
 
     def game(self):
         '''Main method for each turn
@@ -69,7 +69,7 @@ class Halma():
         if self.game_over:
             return
 
-        self.move()
+        time = self.move()
 
         if(self.state.win_condition()[0] or self.state.win_condition()[1]):
             self.game_over = True
@@ -78,7 +78,7 @@ class Halma():
         else : 
             self.next()
 
-        self.interface.render(self.state)
+        self.interface.render(self.state, time)
     
     def next(self):
         '''Updating attribute after turn end

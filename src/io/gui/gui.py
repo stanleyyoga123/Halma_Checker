@@ -31,9 +31,9 @@ class GUI():
             [sg.T("Halma",size=(20,1), font='Any 30', justification='center')],
             [sg.T("Turn : ", auto_size_text=True, font='Any 20'), sg.T("0000",size=(10,1), key="turn", font='Any 20') ],
             [sg.T("Player : ", auto_size_text=True, font='Any 20'), sg.T("", key="player", size=(10,1), font="Any 20") ],
-            [sg.T("Type : ", auto_size_text=True, font='Any 20'), sg.T("", key="type", size=(20,1), font="Any 20") ]
-            # [sg.T("Computing Time : ", auto_size_text=True, font='Any 20')],
-            # [sg.T("", key="time", size=(20,1), font="Any 20")]
+            [sg.T("Type : ", auto_size_text=True, font='Any 20'), sg.T("", key="type", size=(20,1), font="Any 20") ],
+            [sg.T("Computing Time : ", auto_size_text=True, font='Any 20')],
+            [sg.T("", key="time", size=(20,1), font="Any 20")]
         ]
 
         self.status_window = layout
@@ -93,7 +93,7 @@ class GUI():
         sg.Window('',layout, force_toplevel=True, no_titlebar=True, element_justification="center", keep_on_top=True).read(close=True)
         
 
-    def render(self, state):
+    def render(self, state, time=None):
         if self.window is None or self.layout is None : 
             self.init_game_board()
             self.init_game_status()
@@ -105,6 +105,9 @@ class GUI():
         self.window['turn'].update(state.turn + 1)
         self.window['player'].update('RED' if state.currentPlayer.color == Color.RED else 'GREEN')
         self.window['type'].update(translate_type(str(state.currentPlayer.brain)))
+        
+        computingTime = "-" if time == None else '{:.3f}'.format(time)
+        self.window['time'].update(computingTime + " second(s)")
 
 
         location = [{pawn.position.location : str(pawn)} for pawn in state.board.pawns]
