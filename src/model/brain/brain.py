@@ -6,6 +6,9 @@ class Brain(metaclass=ABCMeta):
     '''Base class of brain for the AI implemented in Halma Game
     '''
     
+    def __init__(self):
+        self.computing_time = None
+    
     def reset(self):
         """Reset attributes
         """
@@ -13,7 +16,6 @@ class Brain(metaclass=ABCMeta):
     
     def inject(self, t_limit):
         self.t_limit = t_limit
-        self.computing_time = None
         
     def terminate(self, depth, state):
         p1_win, p2_win = state.win_condition()
