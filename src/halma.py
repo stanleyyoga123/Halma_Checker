@@ -1,13 +1,9 @@
-from .model.player import Player
 from .model.board import Board 
-from .model.bot import Bot
 from .model.tile import Tile 
 from .model.color import Color
 from .model.pawn import Pawn
 from .model.state import State
 from .constant import Constant
-
-import time
 
 class Halma():
     '''Halma class responsible for controlling flow in the game
@@ -58,8 +54,9 @@ class Halma():
             before, after = self.interface.input(self.state) 
             self.state.board.move_pawn(before, after)
         else :
-            before, after = self.state.currentPlayer.find(self.state)
-            # print(before.__repr__(), after.__repr__())
+            (before, after), time = self.state.currentPlayer.find(self.state)
+            # Silakan dipake time nya
+            print(f"Computing time: {time} seconds\n")
             self.state.board.move_pawn(before, after)
 
     def game(self):

@@ -2,7 +2,7 @@ from .brain import Brain
 from src.constant import Constant
 from src.utility import Utility
 from time import time
-from random import randint, choice
+from random import randint
 from math import exp
 
 class MinimaxLocalSearch(Brain):
@@ -26,8 +26,35 @@ class MinimaxLocalSearch(Brain):
             possible_moves.pop(rand_idx)
         return selected_move if selected_move and len(selected_move['to']) else None, possible_moves
     
-    def minimax(self, state, is_max, depth = 0, alpha=float("-inf"), beta=float("inf")):
-        """Minimax Algorithm for solving Halma Checker
+    def generate_n_best_move(self, current_state, possible_moves, n = 5):
+        """Generate n best moves for Optimized Hill Climbing Algorithm
+
+        Args:
+            current_state (State): current state
+            possible_moves (list(dict(from, to))): List possible moves of current player
+            n (int, optional): Number of generated moves. Defaults to 5.
+
+        Returns:
+            list(dict(from, to)): List of dictionary from and to
+        """
+        arr_tup = []
+        idx_moves = 0
+        temp_state = current_state.deepcopy()
+        for possible_move in possible_moves:
+            idx_to = 0
+            for possible_to in possible_move['to']:
+                temp_state.board.move_pawn(possible_move['from'], possible_to)
+                arr_tup.append((Utility.utility_function(temp_state), [idx_moves, idx_to]))
+                temp_state.board.move_pawn(possible_to, possible_move['from'])
+                idx_to += 1
+            idx_moves += 1
+        n_best = sorted(arr_tup, key=lambda x: x[0], reverse=not(current_state.currentPlayer == current_state.player_2))[:n]
+        result = [{'from': possible_moves[loc[0]]['from'], 'to': [possible_moves[loc[0]]['to'][loc[1]]]} 
+                  for _,loc in n_best]
+        return result    
+    
+    def minimax(self, state, is_max, depth = 0, alpha=float("-inf"), beta=float("inf"), algorithm="optimized"):
+        """Minimax + Local Search Algorithm for solving Halma Checker
 
         Parameters:
             state (State): game state
@@ -44,10 +71,10 @@ class MinimaxLocalSearch(Brain):
         possible_moves = state.current_player_possible_moves()
         temp_state = state.deepcopy()
         
-        if self.which_player == state.currentPlayer: 
-            # Jika giliran bot player, maka jalankan localsearch untuk mengambil beberapa possible moves saja
-            possible_moves = self.local_search(temp_state, possible_moves)
-            
+        if self.which_player == state.currentPlayer and depth == 0:
+            # Jika giliran bot player, maka jalankan localsearch pada depth = 0 
+            # untuk mengambil beberapa possible moves saja
+            possible_moves = self.local_search(temp_state, possible_moves, algorithm)
         #Jika bukan bot, pertimbangkan semua moves
         best_move = None
         best_move_val = float('-inf') if is_max else float('inf')
@@ -56,7 +83,6 @@ class MinimaxLocalSearch(Brain):
             for to in move['to']:
                 
                 if time() > self.thinking_time:
-                    # print("TIMEOUT")
                     return best_move, best_move_val
                 
                 temp_state.board.move_pawn(move['from'], to)
@@ -77,14 +103,12 @@ class MinimaxLocalSearch(Brain):
                     beta = min(val, beta)
                 
                 if beta <= alpha:
-                    # print("PRUNING", best_move, best_move_val)
                     return best_move, best_move_val
                 
-        # print("LANCAR", best_move, best_move_val)
         return best_move, best_move_val
     
-    def local_search(self, current_state, possible_moves):
-        """Local search using Simulated Annealing Algorithm
+    def local_search(self, current_state, possible_moves, algorithm = "SA"):
+        """Local search using Simulated Annealing Algorithm or Optimized Hill-Climbing
 
         Args:
             current_state (State): Current state
@@ -94,47 +118,38 @@ class MinimaxLocalSearch(Brain):
         Returns:
             (list(dict(from, to))): new possible_moves with less possible moves
         """
-        #1/5 dari batas waktu setiap depth (asumsi waktu alokasi tiap depth uniform, 
+        # 1/5 dari batas waktu setiap depth (asumsi waktu alokasi tiap depth uniform, 
         # dan butuh 4/5 waktu untuk menelusuri pohon) 
-        sa_time = time() + self.t_limit/(self.max_depth*5)
-        current_value = Utility.utility_function(current_state)
-        generated_moves = []
-        while True:
-            curr_time = sa_time - time()
-            if curr_time <= 0 or not possible_moves: return generated_moves
-            next_move, possible_moves = self.generate_random_move(possible_moves)
-            if next_move:
-                delta_e = self.generate_delta_e(next_move, current_state, current_value)
-                if delta_e > 0: generated_moves.append(next_move)
-                elif exp(delta_e/curr_time): generated_moves.append(next_move)
+        if (algorithm == "SA"):
+            sa_time = time() + self.t_limit/(self.max_depth*5)
+            current_value = Utility.utility_function(current_state)
+            generated_moves = []
+            while True:
+                curr_time = sa_time - time()
+                if curr_time <= 0 or not possible_moves: return generated_moves
+                next_move, possible_moves = self.generate_random_move(possible_moves)
+                if next_move:
+                    delta_e = self.generate_delta_e(next_move, current_state, current_value)
+                    if delta_e > 0: generated_moves.append(next_move)
+                    elif exp(delta_e/curr_time): generated_moves.append(next_move)
+        else: return self.generate_n_best_move(current_state, possible_moves)
+            
             
     def generate_delta_e(self, next_move, current_state, current_value):
+        """Generate deltaE for Simulated Annealing Algorithm
+
+        Args:
+            next_move (dict(from, to)): next possible move
+            current_state (State): current state
+            current_value (float): current state value
+
+        Returns:
+            float: deltaE value
+        """
         current_state.board.move_pawn(next_move['from'], next_move['to'][0])
         next_value = Utility.utility_function(current_state)
         current_state.board.move_pawn(next_move['to'][0], next_move['from'])
         return next_value - current_value
-    
-    def find_best_move(self, state, max_depth = 3):
-        '''Find best move with minimax + local search
-        
-        Parameters:
-            state (State): Current Game State
-        
-        Returns:
-            State: Next state with best move being done by AI 
-        '''
-        self.reset()
-        self.max_depth = max_depth
-        self.which_player = state.currentPlayer
-        start_time = time()
-        best_moves, _ = self.minimax(state, state.currentPlayer == state.player_2)
-        print(f"Computing time: {time() - start_time} seconds\n")
-        if best_moves == None:
-            possible_moves = state.current_player_possible_moves()
-            move = choice(list(possible_moves))
-            move_to_random = choice(list(move['to']))
-            return (move['from'], move_to_random)
-        return best_moves
 
     def __repr__(self):
         return Constant.MINMAXWLOCAL

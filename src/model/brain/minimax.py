@@ -2,7 +2,6 @@ from .brain import Brain
 from src.constant import Constant
 from src.utility import Utility
 from time import time
-import random
 
 class Minimax(Brain):
     '''Class that implemented Minimax algorithm for finding best move in Brain class implementation
@@ -58,27 +57,6 @@ class Minimax(Brain):
                 
         # print("LANCAR", best_move, best_move_val)
         return best_move, best_move_val
-    
-    def find_best_move(self, state, max_depth = 3):
-        '''Find best move with minimax + local search
-        
-        Parameters:
-            state (State): Current Game State
-        
-        Returns:
-            State: Next state with best move being done by AI 
-        '''
-        self.reset()
-        self.max_depth = max_depth
-        start_time = time()
-        best_moves, _ = self.minimax(state, state.currentPlayer == state.player_2)
-        print(f"Computing time: {time() - start_time} seconds\n")
-        if best_moves == None:
-            possible_moves = state.current_player_possible_moves()
-            move = random.choice(list(possible_moves))
-            move_to_random = random.choice(list(move['to']))
-            return (move['from'], move_to_random)
-        return best_moves
 
     def __repr__(self):
         return Constant.MINIMAX
