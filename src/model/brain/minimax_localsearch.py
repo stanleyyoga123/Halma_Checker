@@ -48,7 +48,7 @@ class MinimaxLocalSearch(Brain):
                 temp_state.board.move_pawn(possible_to, possible_move['from'])
                 idx_to += 1
             idx_moves += 1
-        n_best = sorted(arr_tup, key=lambda x: x[0])[:n]
+        n_best = sorted(arr_tup, key=lambda x: x[0], reverse=not(current_state.currentPlayer == current_state.player_2))[:n]
         result = [{'from': possible_moves[loc[0]]['from'], 'to': [possible_moves[loc[0]]['to'][loc[1]]]} 
                   for _,loc in n_best]
         return result    
