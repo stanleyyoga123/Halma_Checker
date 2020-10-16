@@ -54,9 +54,8 @@ class Halma():
             before, after = self.interface.input(self.state) 
             self.state.board.move_pawn(before, after)
         else :
-            (before, after), time = self.state.currentPlayer.find(self.state)
+            before, after = self.state.currentPlayer.find(self.state)
             self.state.board.move_pawn(before, after)
-            return time
         return None
 
     def game(self):
@@ -69,7 +68,7 @@ class Halma():
         if self.game_over:
             return
 
-        time = self.move()
+        self.move()
 
         if(self.state.win_condition()[0] or self.state.win_condition()[1]):
             self.game_over = True
@@ -78,7 +77,7 @@ class Halma():
         else : 
             self.next()
 
-        self.interface.render(self.state, time)
+        self.interface.render(self.state, self.state.currentPlayer.brain.computing_time)
     
     def next(self):
         '''Updating attribute after turn end

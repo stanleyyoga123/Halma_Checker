@@ -13,6 +13,7 @@ class Brain(metaclass=ABCMeta):
     
     def inject(self, t_limit):
         self.t_limit = t_limit
+        self.computing_time = None
         
     def terminate(self, depth, state):
         p1_win, p2_win = state.win_condition()
@@ -33,10 +34,10 @@ class Brain(metaclass=ABCMeta):
         self.which_player = state.currentPlayer
         start_time = time()
         best_moves, _ = self.minimax(state, state.currentPlayer == state.player_2)
-        computing_time = time() - start_time
+        self.computing_time = time() - start_time
         if best_moves == None:
             possible_moves = state.current_player_possible_moves()
             move = choice(list(possible_moves))
             move_to_random = choice(list(move['to']))
             return (move['from'], move_to_random)
-        return (best_moves, computing_time)
+        return best_moves
