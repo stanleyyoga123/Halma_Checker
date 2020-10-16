@@ -1,13 +1,9 @@
-from .model.player import Player
 from .model.board import Board 
-from .model.bot import Bot
 from .model.tile import Tile 
 from .model.color import Color
 from .model.pawn import Pawn
 from .model.state import State
 from .constant import Constant
-
-import time
 
 class Halma():
     '''Halma class responsible for controlling flow in the game

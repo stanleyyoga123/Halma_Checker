@@ -2,7 +2,7 @@ from .brain import Brain
 from src.constant import Constant
 from src.utility import Utility
 from time import time
-from random import randint, choice
+from random import randint
 from math import exp
 
 class MinimaxLocalSearch(Brain):
@@ -27,6 +27,16 @@ class MinimaxLocalSearch(Brain):
         return selected_move if selected_move and len(selected_move['to']) else None, possible_moves
     
     def generate_n_best_move(self, current_state, possible_moves, n = 5):
+        """Generate n best moves for Optimized Hill Climbing Algorithm
+
+        Args:
+            current_state (State): current state
+            possible_moves (list(dict(from, to))): List possible moves of current player
+            n (int, optional): Number of generated moves. Defaults to 5.
+
+        Returns:
+            list(dict(from, to)): List of dictionary from and to
+        """
         arr_tup = []
         idx_moves = 0
         temp_state = current_state.deepcopy()
@@ -44,7 +54,7 @@ class MinimaxLocalSearch(Brain):
         return result    
     
     def minimax(self, state, is_max, depth = 0, alpha=float("-inf"), beta=float("inf"), algorithm="optimized"):
-        """Minimax Algorithm for solving Halma Checker
+        """Minimax + Local Search Algorithm for solving Halma Checker
 
         Parameters:
             state (State): game state
@@ -98,7 +108,7 @@ class MinimaxLocalSearch(Brain):
         return best_move, best_move_val
     
     def local_search(self, current_state, possible_moves, algorithm = "SA"):
-        """Local search using Simulated Annealing Algorithm
+        """Local search using Simulated Annealing Algorithm or Optimized Hill-Climbing
 
         Args:
             current_state (State): Current state
@@ -108,7 +118,7 @@ class MinimaxLocalSearch(Brain):
         Returns:
             (list(dict(from, to))): new possible_moves with less possible moves
         """
-        #1/5 dari batas waktu setiap depth (asumsi waktu alokasi tiap depth uniform, 
+        # 1/5 dari batas waktu setiap depth (asumsi waktu alokasi tiap depth uniform, 
         # dan butuh 4/5 waktu untuk menelusuri pohon) 
         if (algorithm == "SA"):
             sa_time = time() + self.t_limit/(self.max_depth*5)
@@ -126,6 +136,16 @@ class MinimaxLocalSearch(Brain):
             
             
     def generate_delta_e(self, next_move, current_state, current_value):
+        """Generate deltaE for Simulated Annealing Algorithm
+
+        Args:
+            next_move (dict(from, to)): next possible move
+            current_state (State): current state
+            current_value (float): current state value
+
+        Returns:
+            float: deltaE value
+        """
         current_state.board.move_pawn(next_move['from'], next_move['to'][0])
         next_value = Utility.utility_function(current_state)
         current_state.board.move_pawn(next_move['to'][0], next_move['from'])

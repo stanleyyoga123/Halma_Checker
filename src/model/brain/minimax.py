@@ -2,7 +2,6 @@ from .brain import Brain
 from src.constant import Constant
 from src.utility import Utility
 from time import time
-import random
 
 class Minimax(Brain):
     '''Class that implemented Minimax algorithm for finding best move in Brain class implementation

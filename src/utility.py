@@ -1,5 +1,3 @@
-from src.model.tile import Tile
-
 class Utility():
     '''Class for general function that can be used on all class
     '''
