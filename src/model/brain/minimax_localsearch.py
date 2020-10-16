@@ -130,28 +130,6 @@ class MinimaxLocalSearch(Brain):
         next_value = Utility.utility_function(current_state)
         current_state.board.move_pawn(next_move['to'][0], next_move['from'])
         return next_value - current_value
-    
-    def find_best_move(self, state, max_depth = 3):
-        '''Find best move with minimax + local search
-        
-        Parameters:
-            state (State): Current Game State
-        
-        Returns:
-            State: Next state with best move being done by AI 
-        '''
-        self.reset()
-        self.max_depth = max_depth
-        self.which_player = state.currentPlayer
-        start_time = time()
-        best_moves, _ = self.minimax(state, state.currentPlayer == state.player_2)
-        print(f"Computing time: {time() - start_time} seconds\n")
-        if best_moves == None:
-            possible_moves = state.current_player_possible_moves()
-            move = choice(list(possible_moves))
-            move_to_random = choice(list(move['to']))
-            return (move['from'], move_to_random)
-        return best_moves
 
     def __repr__(self):
         return Constant.MINMAXWLOCAL

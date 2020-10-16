@@ -58,8 +58,9 @@ class Halma():
             before, after = self.interface.input(self.state) 
             self.state.board.move_pawn(before, after)
         else :
-            before, after = self.state.currentPlayer.find(self.state)
-            # print(before.__repr__(), after.__repr__())
+            (before, after), time = self.state.currentPlayer.find(self.state)
+            # Silakan dipake time nya
+            print(f"Computing time: {time} seconds\n")
             self.state.board.move_pawn(before, after)
 
     def game(self):
