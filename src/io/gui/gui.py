@@ -29,9 +29,11 @@ class GUI():
     def init_game_status(self):
         layout = [
             [sg.T("Halma",size=(20,1), font='Any 30', justification='center')],
-            [sg.T("Turn : ", auto_size_text=True, font='Any 20'), sg.T("", key="turn", auto_size_text=True, font='Any 20') ],
+            [sg.T("Turn : ", auto_size_text=True, font='Any 20'), sg.T("0000",size=(10,1), key="turn", font='Any 20') ],
             [sg.T("Player : ", auto_size_text=True, font='Any 20'), sg.T("", key="player", size=(10,1), font="Any 20") ],
             [sg.T("Type : ", auto_size_text=True, font='Any 20'), sg.T("", key="type", size=(20,1), font="Any 20") ]
+            # [sg.T("Computing Time : ", auto_size_text=True, font='Any 20')],
+            # [sg.T("", key="time", size=(20,1), font="Any 20")]
         ]
 
         self.status_window = layout
@@ -103,6 +105,7 @@ class GUI():
         self.window['turn'].update(state.turn + 1)
         self.window['player'].update('RED' if state.currentPlayer.color == Color.RED else 'GREEN')
         self.window['type'].update(translate_type(str(state.currentPlayer.brain)))
+
 
         location = [{pawn.position.location : str(pawn)} for pawn in state.board.pawns]
         red_loc = [pawn.position.location for pawn in state.board.pawns if str(pawn) == Constant.PAWNREDTYPE]
