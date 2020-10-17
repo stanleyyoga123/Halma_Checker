@@ -97,7 +97,6 @@ class GUI():
         
         sg.Window('',layout, force_toplevel=True, no_titlebar=True, element_justification="center", keep_on_top=True).read(close=True)
         
-
     def render(self, state, time=None):
         if self.window is None or self.layout is None : 
             self.init_game_board()
@@ -113,8 +112,6 @@ class GUI():
         
         computingTime = "-" if time == None else '{:.3f}'.format(time)
         self.window['time'].update(computingTime + " second(s)")
-
-
         location = [{pawn.position.location : str(pawn)} for pawn in state.board.pawns]
         red_loc = [pawn.position.location for pawn in state.board.pawns if str(pawn) == Constant.PAWNREDTYPE]
         green_loc = [pawn.position.location for pawn in state.board.pawns if str(pawn) == Constant.PAWNGREENTYPE]
