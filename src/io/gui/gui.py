@@ -85,8 +85,8 @@ class GUI():
     def show_winner(self, state):
         playerColor = state.currentPlayer.color
         color = "GREEN" if playerColor == Color.GREEN else "RED"
-        p1TotalTime = "-" if repr(state.player_1.brain) == Constant.NOBRAIN else '{:.3f}'.format(state.player_1.brain.computing_time)   
-        p2TotalTime = "-" if repr(state.player_2.brain) == Constant.NOBRAIN else '{:.3f}'.format(state.player_2.brain.computing_time)  
+        p1TotalTime = "-" if repr(state.player_1.brain) == Constant.NOBRAIN else '{:.3f}'.format(state.player_1.brain.total_computing_time)   
+        p2TotalTime = "-" if repr(state.player_2.brain) == Constant.NOBRAIN else '{:.3f}'.format(state.player_2.brain.total_computing_time)  
         layout = [
              [sg.T("Congratulations!!!", font="Any 20")],
              [sg.T(Constant.PAWNCHAR + str(color) + Constant.PAWNCHAR, font="Any 20",text_color= color.lower(), justification="center")],

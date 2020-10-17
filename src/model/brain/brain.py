@@ -8,6 +8,10 @@ class Brain(metaclass=ABCMeta):
     
     def __init__(self):
         self.computing_time = None
+        self.total_computing_time = 0
+        
+    def update_total_computing_time(self):
+        self.total_computing_time += self.computing_time
     
     def reset(self):
         """Reset attributes
@@ -37,6 +41,7 @@ class Brain(metaclass=ABCMeta):
         start_time = time()
         best_moves, _ = self.minimax(state, state.currentPlayer == state.player_2)
         self.computing_time = time() - start_time
+        self.update_total_computing_time()
         if best_moves == None:
             possible_moves = state.current_player_possible_moves()
             move = choice(list(possible_moves))
