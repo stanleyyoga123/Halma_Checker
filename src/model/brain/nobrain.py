@@ -4,7 +4,7 @@ from src.constant import Constant
 class NoBrain(Brain):
     '''Class that not implemented any intelligence for finding best move in Brain class implementation
     '''
-    def find_best_move(self, utility_function, state):
+    def find_best_move(self, state):
         '''No brain find best move (should not be implemented, as a representation only)
         
         Parameters:
