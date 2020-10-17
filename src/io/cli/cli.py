@@ -10,11 +10,11 @@ from .utils import get_style
 from ...model import Color
 
 class CLI():
-    def render(self, state):
+    def render(self, state, time=None):
         print ("Game Status : ")
         print(f"Current Player : {str(state.currentPlayer)}")
         print(f"Current Turn : {state.turn + 1}")
-
+        print(f"Computing Time : {time if time != None else '-'} seconds\n")
         print(colored.green(str(state.board)))
 
     def input(self, state):
@@ -23,12 +23,10 @@ class CLI():
             pawns = [f"Pawns at {pawn.position}" for pawn in state.currentPlayer.pawns]
             i_choosed_pawn = self.ask_pawn(pawns)
             choosed_pawn = state.currentPlayer.pawns[i_choosed_pawn]
-
             possible_moves = state.board.possible_moves(choosed_pawn)
 
             if len(possible_moves) <= 0:
                 continue
-
             possible_moves_str = [f"Pawn to {pawn.position}" for pawn in possible_moves]
             i_moved_pawn = self.ask_movement(possible_moves_str)
             found = True
@@ -144,10 +142,16 @@ class CLI():
     def show_ending(self, ending = "Congratulations!!"):
         print(colored.red(pyfiglet.figlet_format(ending, font = "slant")))
 
-    def show_winner(self, player):
-        if player.color == Color.RED:
+    def show_winner(self, state):
+        p1TotalTime = "-" if repr(state.player_1.brain) == Constant.NOBRAIN else '{:.3f}'.format(state.player_1.brain.total_computing_time)   
+        p2TotalTime = "-" if repr(state.player_2.brain) == Constant.NOBRAIN else '{:.3f}'.format(state.player_2.brain.total_computing_time)
+        if state.currentPlayer.color == Color.RED:
             print(colored.red(pyfiglet.figlet_format("RED WIN!", font = "slant")))
-        elif player.color == Color.GREEN:
+        elif state.currentPlayer.color == Color.GREEN:
             print(colored.green(pyfiglet.figlet_format("GREEN WIN!", font = "slant")))
+        
+        print("P1 Total Computing Time : " + p1TotalTime + " second(s)")
+        print("P2 Total Computing Time : " + p2TotalTime + " second(s)")
+
 
     
