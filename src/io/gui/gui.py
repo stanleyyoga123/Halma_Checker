@@ -32,7 +32,7 @@ class GUI():
             [sg.T("Turn : ", auto_size_text=True, font='Any 20'), sg.T("0000",size=(10,1), key="turn", font='Any 20') ],
             [sg.T("Player : ", auto_size_text=True, font='Any 20'), sg.T("", key="player", size=(10,1), font="Any 20") ],
             [sg.T("Type : ", auto_size_text=True, font='Any 20'), sg.T("", key="type", size=(20,1), font="Any 20") ],
-            [sg.T("Computing Time : ", auto_size_text=True, font='Any 20')],
+            [sg.T("Last Turn Computing Time : ", auto_size_text=True, font='Any 20')],
             [sg.T("", key="time", size=(20,1), font="Any 20")]
         ]
 
@@ -86,12 +86,13 @@ class GUI():
         playerColor = state.currentPlayer.color
         color = "GREEN" if playerColor == Color.GREEN else "RED"
         p1TotalTime = "-" if repr(state.player_1.brain) == Constant.NOBRAIN else '{:.3f}'.format(state.player_1.brain.total_computing_time)   
-        p2TotalTime = "-" if repr(state.player_2.brain) == Constant.NOBRAIN else '{:.3f}'.format(state.player_2.brain.total_computing_time)  
+        p2TotalTime = "-" if repr(state.player_2.brain) == Constant.NOBRAIN else '{:.3f}'.format(state.player_2.brain.total_computing_time)
+        
         layout = [
              [sg.T("Congratulations!!!", font="Any 20")],
              [sg.T(Constant.PAWNCHAR + str(color) + Constant.PAWNCHAR, font="Any 20",text_color= color.lower(), justification="center")],
-             [sg.T("Player 1 : " + p1TotalTime + " second(s)", font="Any 15",text_color= "green", justification="center")],
-             [sg.T("Player 2 : " + p2TotalTime + " second(s)", font="Any 15",text_color= "red", justification="center")],
+             [sg.T("Player 1 : " + p1TotalTime + " second(s)", font="Any 15",text_color= "green" if state.player_1.color == Color.GREEN else "red", justification="center")],
+             [sg.T("Player 2 : " + p2TotalTime + " second(s)", font="Any 15",text_color= "green" if state.player_2.color == Color.GREEN else "red", justification="center")],
              [sg.B('OK', font="Any 15", auto_size_button=True)]
         ]
         
@@ -102,7 +103,7 @@ class GUI():
             self.init_game_board()
             self.init_game_status()
             self.init_layout()
-            self.window = sg.Window('Halma Checker', self.layout, force_toplevel=True, resizable=False)
+            self.window = sg.Window('Halma Checker', self.layout, keep_on_top=True, resizable=False)
             self.window.Finalize()
 
         # update game status
