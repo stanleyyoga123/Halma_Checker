@@ -82,11 +82,16 @@ class GUI():
             else :
                 return  Constant.DARKBOARD
     
-    def show_winner(self, player):
-        color = "GREEN" if player.color == Color.GREEN else "RED"
+    def show_winner(self, state):
+        playerColor = state.currentPlayer.color
+        color = "GREEN" if playerColor == Color.GREEN else "RED"
+        p1TotalTime = "-" if repr(state.player_1.brain) == Constant.NOBRAIN else '{:.3f}'.format(state.player_1.brain.computing_time)   
+        p2TotalTime = "-" if repr(state.player_2.brain) == Constant.NOBRAIN else '{:.3f}'.format(state.player_2.brain.computing_time)  
         layout = [
              [sg.T("Congratulations!!!", font="Any 20")],
              [sg.T(Constant.PAWNCHAR + str(color) + Constant.PAWNCHAR, font="Any 20",text_color= color.lower(), justification="center")],
+             [sg.T("Player 1 : " + p1TotalTime + " second(s)", font="Any 15",text_color= "green", justification="center")],
+             [sg.T("Player 2 : " + p2TotalTime + " second(s)", font="Any 15",text_color= "red", justification="center")],
              [sg.B('OK', font="Any 15", auto_size_button=True)]
         ]
         
@@ -98,7 +103,7 @@ class GUI():
             self.init_game_board()
             self.init_game_status()
             self.init_layout()
-            self.window = sg.Window('Halma Checker', self.layout, resizable=False, keep_on_top=True)
+            self.window = sg.Window('Halma Checker', self.layout, force_toplevel=True, resizable=False)
             self.window.Finalize()
 
         # update game status

@@ -73,7 +73,7 @@ class Halma():
         if(self.state.win_condition()[0] or self.state.win_condition()[1]):
             self.game_over = True
             self.interface.render(self.state)
-            self.interface.show_winner(self.state.currentPlayer)
+            self.interface.show_winner(self.state)
         else : 
             self.next()
 

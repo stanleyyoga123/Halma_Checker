@@ -144,10 +144,16 @@ class CLI():
     def show_ending(self, ending = "Congratulations!!"):
         print(colored.red(pyfiglet.figlet_format(ending, font = "slant")))
 
-    def show_winner(self, player):
-        if player.color == Color.RED:
+    def show_winner(self, state):
+        p1TotalTime = "-" if repr(state.player_1.brain) == Constant.NOBRAIN else '{:.3f}'.format(state.player_1.brain.computing_time)   
+        p2TotalTime = "-" if repr(state.player_2.brain) == Constant.NOBRAIN else '{:.3f}'.format(state.player_2.brain.computing_time)
+        if state.currentPlayer.color == Color.RED:
             print(colored.red(pyfiglet.figlet_format("RED WIN!", font = "slant")))
-        elif player.color == Color.GREEN:
+        elif state.currentPlayer.color == Color.GREEN:
             print(colored.green(pyfiglet.figlet_format("GREEN WIN!", font = "slant")))
+        
+        print("P1 Total Computing Time : " + p1TotalTime + " second(s)")
+        print("P2 Total Computing Time : " + p2TotalTime + " second(s)")
+
 
     
