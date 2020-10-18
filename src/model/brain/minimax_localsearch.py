@@ -1,11 +1,11 @@
-from .brain import Brain
+from .minimax import Minimax
 from src.constant import Constant
 from src.utility import Utility
 from time import time
 from random import randint
 from math import exp
 
-class MinimaxLocalSearch(Brain):
+class MinimaxLocalSearch(Minimax):
     '''Class that implemented Minimax algorithm with local search usage for finding best move in Brain class implementation
     '''
     
@@ -61,7 +61,7 @@ class MinimaxLocalSearch(Brain):
             is_max (Boolean): is maxing the objective value
 
         Returns:
-            Tuple: Tuple of (state objective value, state)
+            Tuple: Tuple of (best_move objective value, best_move)
         """
         # Terminate        
         if self.terminate(depth, state):
@@ -69,43 +69,13 @@ class MinimaxLocalSearch(Brain):
         
         # Recursive
         possible_moves = state.current_player_possible_moves()
-        temp_state = state.deepcopy()
         
         if self.which_player == state.currentPlayer and depth == 0:
             # Jika giliran bot player, maka jalankan localsearch pada depth = 0 
             # untuk mengambil beberapa possible moves saja
-            possible_moves = self.local_search(temp_state, possible_moves, algorithm)
+            possible_moves = self.local_search(state, possible_moves, algorithm)
         #Jika bukan bot, pertimbangkan semua moves
-        best_move = None
-        best_move_val = float('-inf') if is_max else float('inf')
-        
-        for move in possible_moves:
-            for to in move['to']:
-                
-                if time() > self.thinking_time:
-                    return best_move, best_move_val
-                
-                temp_state.board.move_pawn(move['from'], to)
-                temp_state.next_turn()
-                _, val = self.minimax(temp_state, not(is_max), depth+1, alpha, beta)
-                
-                temp_state.board.move_pawn(to, move['from'])
-                temp_state.undo_turn()
-                
-                if is_max and val > best_move_val:
-                    best_move_val = val
-                    best_move = (move['from'], to)
-                    alpha = max(val, alpha)
-                
-                if not(is_max) and val < best_move_val:
-                    best_move_val = val
-                    best_move = (move['from'], to)
-                    beta = min(val, beta)
-                
-                if beta <= alpha:
-                    return best_move, best_move_val
-                
-        return best_move, best_move_val
+        return self.search(is_max, possible_moves, state, depth, alpha, beta) #minimax search
     
     def local_search(self, current_state, possible_moves, algorithm = "SA"):
         """Local search using Simulated Annealing Algorithm or Optimized Hill-Climbing

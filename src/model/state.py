@@ -54,8 +54,6 @@ class State():
         Returns:
             state (State): State
         '''
-
-        # TODO: Need to deepcopy for all object parameter
         return copy.deepcopy(self)
 
     def win_condition(self):

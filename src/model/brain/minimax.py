@@ -15,7 +15,7 @@ class Minimax(Brain):
             is_max (Boolean): is maxing the objective value
 
         Returns:
-            Tuple: Tuple of (state objective value, state)
+            Tuple: Tuple of (best_move objective value, best_move)
         """
         # Terminate        
         if self.terminate(depth, state):
@@ -23,6 +23,23 @@ class Minimax(Brain):
         
         # Recursive
         possible_moves = state.current_player_possible_moves()
+        return self.search(is_max, possible_moves, state, depth, alpha, beta)
+        
+        
+    def search(self, is_max, possible_moves, state, depth, alpha, beta):
+        """Brain with Minimax search tree
+
+        Args:
+            is_max (bool): if player max
+            possible_moves (list(dict(from, to))): List possible moves of current player
+            state (State): current state
+            depth (int): current depth
+            alpha (float): alpha for alpha beta pruning
+            beta (float): beta for alpha beta pruning
+
+        Returns:
+            Tuple: Tuple of (best_move objective value, best_move)
+        """
         temp_state = state.deepcopy()
         best_move = None
         best_move_val = float('-inf') if is_max else float('inf')
@@ -31,7 +48,6 @@ class Minimax(Brain):
             for to in move['to']:
                 
                 if time() > self.thinking_time:
-                    # print("TIMEOUT")
                     return best_move, best_move_val
                 
                 temp_state.board.move_pawn(move['from'], to)
@@ -42,20 +58,18 @@ class Minimax(Brain):
                 temp_state.undo_turn()
                 
                 if is_max and val > best_move_val:
+                    alpha = max(val, alpha)
                     best_move_val = val
                     best_move = (move['from'], to)
-                    alpha = max(val, alpha)
                 
                 if not(is_max) and val < best_move_val:
+                    beta = min(val, beta)
                     best_move_val = val
                     best_move = (move['from'], to)
-                    beta = min(val, beta)
                 
                 if beta <= alpha: #pruning
-                    # print("PRUNING", best_move, best_move_val)
                     return best_move, best_move_val
                 
-        # print("LANCAR", best_move, best_move_val)
         return best_move, best_move_val
 
     def __repr__(self):

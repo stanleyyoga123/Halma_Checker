@@ -11,6 +11,8 @@ class Brain(metaclass=ABCMeta):
         self.total_computing_time = 0
         
     def update_total_computing_time(self):
+        """Update total computing time of this brain
+        """
         self.total_computing_time += self.computing_time
     
     def reset(self):
@@ -19,11 +21,21 @@ class Brain(metaclass=ABCMeta):
         self.thinking_time = time() + self.t_limit
     
     def inject(self, t_limit):
+        """Inject t_limit to brain
+        """
         self.t_limit = t_limit
         
     def terminate(self, depth, state):
+        """Terminate brain
+
+        Args:
+            depth (int): depth of tree
+            state (State): current state
+
+        Returns:
+            boolean: True if terminate condition
+        """ 
         p1_win, p2_win = state.win_condition()
-        # if time() > self.thinking_time: print("TIME'S UP")
         return depth == self.max_depth or p1_win or p2_win or time() > self.thinking_time
     
     def find_best_move(self, state, max_depth = 3):
