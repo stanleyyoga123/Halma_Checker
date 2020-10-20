@@ -27,9 +27,12 @@ if __name__ == '__main__':
 	game.interface.render(game.state)
 
 	while True:
-		game.game()
+		try:
+			game.game()
+		except RuntimeError:
+			print('Exit Game!')
+			break
+
 		if game.game_over :
+			print("Game end, winner: ", game.state.currentPlayer)
 			break 
-	
-	print("Game end, winner: ", game.state.currentPlayer)
-	

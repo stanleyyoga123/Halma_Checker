@@ -34,12 +34,7 @@ $ pip freeze > requirements.txt
 ```
 
 ### Available scripts :
-- Run the test scripts using pytest-cov : 
+- Simply just run this command to play this game, even you don't have the dependencies installed : 
 ```bash
-./test-scripts.sh
+run.bat
 ```
-
->Action Notes : Run when pushed to develop and master branch
-
-
-
